@@ -47,6 +47,7 @@ export function SpellingPage() {
   const [wordStartTime, setWordStartTime] = useState<number>(Date.now())
   const [sessionActive, setSessionActive] = useState(false)
   const [sessionComplete, setSessionComplete] = useState(false)
+  const [initializationError, setInitializationError] = useState(false)
   
   // Audio state
   const [isPlaying, setIsPlaying] = useState(false)
@@ -55,32 +56,58 @@ export function SpellingPage() {
   
   // Initialize session
   useEffect(() => {
-    if (vocabularyLists.length === 0) {
-      fetchVocabularyLists()
-    }
-  }, [])
-  
-  useEffect(() => {
-    if (vocabularyLists.length > 0 && !sessionActive) {
-      const defaultList = vocabularyLists.find(list => list.is_default) || vocabularyLists[0]
-      if (defaultList) {
-        setCurrentList(defaultList)
+    const initializeSession = async () => {
+      try {
+        // Set a timeout to prevent infinite loading
+        const timeoutId = setTimeout(() => {
+          console.error('Spelling session initialization timeout')
+          setInitializationError(true)
+        }, 10000) // 10 second timeout
+        
+        // Fetch vocabulary lists if not already loaded
+        if (vocabularyLists.length === 0) {
+          await fetchVocabularyLists()
+        }
+        
+        // Wait a bit for the store to update
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        // Get the updated lists from the store
+        const currentLists = useVocabularyStore.getState().vocabularyLists
+        if (currentLists.length > 0) {
+          const defaultList = currentLists.find(list => list.is_default) || currentLists[0]
+          if (defaultList) {
+            await setCurrentList(defaultList)
+          }
+        } else {
+          console.error('No vocabulary lists available')
+          setInitializationError(true)
+          clearTimeout(timeoutId)
+          return
+        }
+        
+        // Wait for words to be loaded
+        await new Promise(resolve => setTimeout(resolve, 100))
+        const currentWords = useVocabularyStore.getState().words
+        
+        if (currentWords.length > 0) {
+          startSpellingSession()
+        } else {
+          console.error('No words available for the selected list')
+          setInitializationError(true)
+        }
+        
+        clearTimeout(timeoutId)
+      } catch (error) {
+        console.error('Error initializing spelling session:', error)
+        setInitializationError(true)
       }
     }
-  }, [vocabularyLists, sessionActive, setCurrentList])
+    
+    initializeSession()
+  }, [])
   
-  useEffect(() => {
-    if (words.length > 0 && !sessionActive) {
-      startSpellingSession()
-    }
-  }, [words])
-  
-  // Play audio when word changes
-  useEffect(() => {
-    if (currentWord && sessionActive && audioEnabled) {
-      playWordAudio()
-    }
-  }, [currentWord, sessionActive])
+  // Note: Removed automatic audio playback - browsers require user interaction
   
   const startSpellingSession = () => {
     startLearningSession('spelling')
@@ -103,25 +130,36 @@ export function SpellingPage() {
     
     try {
       setIsPlaying(true)
-      const audioUrl = `/audio/word_${currentWord.id.toString().padStart(3, '0')}_${currentWord.word}.mp3`
+      // Use sort_order for audio file naming since audio files are numbered sequentially
+      const audioId = currentWord.sort_order ? currentWord.sort_order.toString().padStart(3, '0') : '001'
+      const audioUrl = `/audio/word_${audioId}_${currentWord.word}.mp3`
       
+      // Clean up previous audio
       if (audioRef.current) {
         audioRef.current.pause()
+        audioRef.current = null
       }
       
+      // Create new audio element
       audioRef.current = new Audio(audioUrl)
       audioRef.current.volume = 0.8
       
+      // Set up event handlers
       audioRef.current.onended = () => setIsPlaying(false)
-      audioRef.current.onerror = () => {
+      audioRef.current.onerror = (e) => {
         setIsPlaying(false)
-        console.warn(`Audio not found for word: ${currentWord.word}`)
+        console.error(`Audio error for word: ${currentWord.word}`, e)
       }
       
+      // Play the audio
       await audioRef.current.play()
     } catch (error) {
       setIsPlaying(false)
       console.error('Error playing audio:', error)
+      // Don't show error to user for autoplay policy issues
+      if (error.name !== 'NotAllowedError') {
+        console.warn(`Audio not available for word: ${currentWord.word}`)
+      }
     }
   }
   
@@ -312,6 +350,37 @@ export function SpellingPage() {
     )
   }
   
+  if (initializationError) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-teal-50">
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center max-w-md mx-auto px-4">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-red-800 mb-2">Loading Error</h2>
+              <p className="text-red-600 mb-4">
+                There was an issue loading the spelling session.
+              </p>
+              <div className="space-y-2">
+                <button
+                  onClick={() => window.location.reload()}
+                  className="w-full bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Refresh Page
+                </button>
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  Back to Dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!sessionActive || !currentWord) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-teal-50">
