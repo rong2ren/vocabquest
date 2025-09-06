@@ -1,0 +1,1608 @@
+{
+  "words": [
+    {
+      "id": 1,
+      "word": "ability",
+      "definition": "the quality of having the means or skills to do something",
+      "example_sentence": "Maria showed great ability in solving difficult math problems."
+    },
+    {
+      "id": 2,
+      "word": "absorb",
+      "definition": "to take in liquid, gas, or other substance",
+      "example_sentence": "The sponge can absorb a lot of water quickly."
+    },
+    {
+      "id": 3,
+      "word": "ancient",
+      "definition": "belonging to times long past, very old",
+      "example_sentence": "The students learned about ancient civilizations in Egypt."
+    },
+    {
+      "id": 4,
+      "word": "approach",
+      "definition": "to move towards or come near to something",
+      "example_sentence": "The deer slowly approached the stream to drink water."
+    },
+    {
+      "id": 5,
+      "word": "arrange",
+      "definition": "to put things in a particular order or position",
+      "example_sentence": "Please arrange the books on the shelf by size."
+    },
+    {
+      "id": 6,
+      "word": "arctic",
+      "definition": "extremely cold, like the North Pole region",
+      "example_sentence": "Polar bears live in the arctic climate where it's very cold."
+    },
+    {
+      "id": 7,
+      "word": "attitude",
+      "definition": "a way of thinking or feeling about someone or something",
+      "example_sentence": "Jenny has a positive attitude about learning new things."
+    },
+    {
+      "id": 8,
+      "word": "attract",
+      "definition": "to draw something toward oneself",
+      "example_sentence": "Bright flowers attract bees and butterflies."
+    },
+    {
+      "id": 9,
+      "word": "average",
+      "definition": "typical or normal, not special or unusual",
+      "example_sentence": "The average height of students in our class is four feet."
+    },
+    {
+      "id": 10,
+      "word": "bold",
+      "definition": "fearless and daring, willing to take risks",
+      "example_sentence": "It was bold of Sam to try the difficult gymnastics move."
+    },
+    {
+      "id": 11,
+      "word": "border",
+      "definition": "the edge or boundary of something",
+      "example_sentence": "The garden has a border of colorful flowers around it."
+    },
+    {
+      "id": 12,
+      "word": "brief",
+      "definition": "lasting only a short time",
+      "example_sentence": "The teacher gave us a brief explanation before the test."
+    },
+    {
+      "id": 13,
+      "word": "brilliant",
+      "definition": "very bright or shining intensely",
+      "example_sentence": "The brilliant sunshine made everything look golden."
+    },
+    {
+      "id": 14,
+      "word": "capture",
+      "definition": "to catch and hold someone or something",
+      "example_sentence": "The photographer tried to capture the beautiful sunset."
+    },
+    {
+      "id": 15,
+      "word": "certain",
+      "definition": "sure or confident about something",
+      "example_sentence": "I am certain that tomorrow is Friday."
+    },
+    {
+      "id": 16,
+      "word": "climate",
+      "definition": "the usual weather conditions in a place over a long time",
+      "example_sentence": "The climate in Florida is warm and humid most of the year."
+    },
+    {
+      "id": 17,
+      "word": "clever",
+      "definition": "quick to understand and learn",
+      "example_sentence": "The clever student found a new way to solve the puzzle."
+    },
+    {
+      "id": 18,
+      "word": "coast",
+      "definition": "the land near the sea or ocean",
+      "example_sentence": "We walked along the coast and collected seashells."
+    },
+    {
+      "id": 19,
+      "word": "community",
+      "definition": "a group of people living in the same area",
+      "example_sentence": "Our community worked together to clean up the park."
+    },
+    {
+      "id": 20,
+      "word": "compare",
+      "definition": "to examine how things are similar or different",
+      "example_sentence": "Let's compare these two books to see which one is better."
+    },
+    {
+      "id": 21,
+      "word": "consider",
+      "definition": "to think about carefully",
+      "example_sentence": "Please consider my suggestion before making a decision."
+    },
+    {
+      "id": 22,
+      "word": "contain",
+      "definition": "to hold or include something inside",
+      "example_sentence": "This box contains all my favorite toys."
+    },
+    {
+      "id": 23,
+      "word": "continent",
+      "definition": "one of the seven large land masses on Earth",
+      "example_sentence": "Africa is the continent where lions and elephants live."
+    },
+    {
+      "id": 24,
+      "word": "convince",
+      "definition": "to make someone believe something is true",
+      "example_sentence": "I tried to convince my mom to let me stay up late."
+    },
+    {
+      "id": 25,
+      "word": "coward",
+      "definition": "a person who is easily frightened",
+      "example_sentence": "Don't be a coward; try the roller coaster with us!"
+    },
+    {
+      "id": 26,
+      "word": "custom",
+      "definition": "a traditional way of doing something",
+      "example_sentence": "It's a custom in our family to have pancakes on Sunday morning."
+    },
+    {
+      "id": 27,
+      "word": "defend",
+      "definition": "to protect someone or something from harm",
+      "example_sentence": "The mother bird will defend her nest from danger."
+    },
+    {
+      "id": 28,
+      "word": "delicate",
+      "definition": "easily broken or damaged; fragile",
+      "example_sentence": "Handle the delicate butterfly wings very carefully."
+    },
+    {
+      "id": 29,
+      "word": "describe",
+      "definition": "to tell what something is like using words",
+      "example_sentence": "Can you describe what your lost dog looks like?"
+    },
+    {
+      "id": 30,
+      "word": "develop",
+      "definition": "to grow or change into something better",
+      "example_sentence": "Plants develop from tiny seeds into full-grown flowers."
+    },
+    {
+      "id": 31,
+      "word": "diagram",
+      "definition": "a simple drawing that explains how something works",
+      "example_sentence": "The diagram showed how to build the model airplane."
+    },
+    {
+      "id": 32,
+      "word": "distant",
+      "definition": "far away in space or time",
+      "example_sentence": "We could see the distant mountains on the horizon."
+    },
+    {
+      "id": 33,
+      "word": "ecosystem",
+      "definition": "all the living and non-living things in an area that work together",
+      "example_sentence": "The forest ecosystem includes trees, animals, and soil."
+    },
+    {
+      "id": 34,
+      "word": "elegant",
+      "definition": "graceful and stylish in appearance or manner",
+      "example_sentence": "The swan moved across the water in an elegant way."
+    },
+    {
+      "id": 35,
+      "word": "enable",
+      "definition": "to make it possible for someone to do something",
+      "example_sentence": "The wheelchair ramp will enable everyone to enter the building."
+    },
+    {
+      "id": 36,
+      "word": "energy",
+      "definition": "the power to do work or make things happen",
+      "example_sentence": "Solar panels collect energy from the sun."
+    },
+    {
+      "id": 37,
+      "word": "examine",
+      "definition": "to look at something carefully and closely",
+      "example_sentence": "The doctor will examine your throat to see why it hurts."
+    },
+    {
+      "id": 38,
+      "word": "experience",
+      "definition": "something that happens to you or something you do",
+      "example_sentence": "Going to the zoo was an exciting experience for the children."
+    },
+    {
+      "id": 39,
+      "word": "explore",
+      "definition": "to travel to new places to learn about them",
+      "example_sentence": "The astronauts will explore the surface of Mars."
+    },
+    {
+      "id": 40,
+      "word": "fatal",
+      "definition": "causing death or disaster",
+      "example_sentence": "The knight avoided the dragon's fatal fire breath."
+    },
+    {
+      "id": 41,
+      "word": "fierce",
+      "definition": "showing strong, violent feeling or energy",
+      "example_sentence": "The fierce storm knocked down several trees."
+    },
+    {
+      "id": 42,
+      "word": "flexible",
+      "definition": "able to bend easily without breaking",
+      "example_sentence": "Rubber bands are flexible and can stretch."
+    },
+    {
+      "id": 43,
+      "word": "fortunate",
+      "definition": "having good luck",
+      "example_sentence": "We were fortunate to find our lost cat quickly."
+    },
+    {
+      "id": 44,
+      "word": "fossil",
+      "definition": "remains of an ancient plant or animal preserved in rock",
+      "example_sentence": "We found a dinosaur fossil in the museum."
+    },
+    {
+      "id": 45,
+      "word": "frail",
+      "definition": "weak and easily damaged",
+      "example_sentence": "The frail old bridge couldn't support heavy trucks."
+    },
+    {
+      "id": 46,
+      "word": "furious",
+      "definition": "extremely angry",
+      "example_sentence": "Mom was furious when she saw the messy kitchen."
+    },
+    {
+      "id": 47,
+      "word": "globe",
+      "definition": "a round object that shows the Earth",
+      "example_sentence": "We used the globe to find Australia in geography class."
+    },
+    {
+      "id": 48,
+      "word": "gradual",
+      "definition": "happening slowly over time",
+      "example_sentence": "There was a gradual change in the weather as winter approached."
+    },
+    {
+      "id": 49,
+      "word": "gravity",
+      "definition": "the force that pulls things toward the Earth",
+      "example_sentence": "Gravity makes the ball fall down when you drop it."
+    },
+    {
+      "id": 50,
+      "word": "habitat",
+      "definition": "the natural home of an animal or plant",
+      "example_sentence": "The rainforest is the natural habitat of many colorful birds."
+    },
+    {
+      "id": 51,
+      "word": "harsh",
+      "definition": "rough, unpleasant, or severe",
+      "example_sentence": "The harsh winter made it difficult for animals to find food."
+    },
+    {
+      "id": 52,
+      "word": "hypothesis",
+      "definition": "an educated guess about what might happen",
+      "example_sentence": "My hypothesis is that plants grow faster with more sunlight."
+    },
+    {
+      "id": 53,
+      "word": "identify",
+      "definition": "to recognize and name someone or something",
+      "example_sentence": "Can you identify which bird is making that sound?"
+    },
+    {
+      "id": 54,
+      "word": "impact",
+      "definition": "the force of one thing hitting another",
+      "example_sentence": "The impact of the meteor created a large crater."
+    },
+    {
+      "id": 55,
+      "word": "individual",
+      "definition": "belonging to one person, separate and distinct",
+      "example_sentence": "Each student has their own individual desk."
+    },
+    {
+      "id": 56,
+      "word": "intelligent",
+      "definition": "having the ability to learn and understand quickly",
+      "example_sentence": "Dolphins are intelligent animals that can solve problems."
+    },
+    {
+      "id": 57,
+      "word": "intend",
+      "definition": "to plan or mean to do something",
+      "example_sentence": "I intend to finish my homework before dinner."
+    },
+    {
+      "id": 58,
+      "word": "journey",
+      "definition": "a trip from one place to another",
+      "example_sentence": "Our journey to the mountains took three hours by car."
+    },
+    {
+      "id": 59,
+      "word": "launch",
+      "definition": "to send something into the air or water with force",
+      "example_sentence": "NASA will launch the rocket to Mars next month."
+    },
+    {
+      "id": 60,
+      "word": "limit",
+      "definition": "the furthest point or greatest amount allowed",
+      "example_sentence": "The speed limit on this road is 25 miles per hour."
+    },
+    {
+      "id": 61,
+      "word": "locate",
+      "definition": "to find the exact position of something",
+      "example_sentence": "We used a map to locate the treasure."
+    },
+    {
+      "id": 62,
+      "word": "loyal",
+      "definition": "faithful and devoted to someone or something",
+      "example_sentence": "My loyal dog always waits for me to come home."
+    },
+    {
+      "id": 63,
+      "word": "magnificent",
+      "definition": "extremely beautiful or impressive",
+      "example_sentence": "The magnificent castle stood tall on the hilltop."
+    },
+    {
+      "id": 64,
+      "word": "method",
+      "definition": "a particular way of doing something",
+      "example_sentence": "She has a special method for solving math problems."
+    },
+    {
+      "id": 65,
+      "word": "mineral",
+      "definition": "a natural substance found in the earth",
+      "example_sentence": "Salt is a mineral that we use to flavor food."
+    },
+    {
+      "id": 66,
+      "word": "misery",
+      "definition": "great unhappiness or suffering",
+      "example_sentence": "The lost puppy's misery ended when it found its family."
+    },
+    {
+      "id": 67,
+      "word": "moisture",
+      "definition": "small amounts of water in the air or on surfaces",
+      "example_sentence": "Plants need moisture from the soil to grow properly."
+    },
+    {
+      "id": 68,
+      "word": "mystify",
+      "definition": "to confuse or puzzle someone completely",
+      "example_sentence": "The magician's trick will mystify the audience."
+    },
+    {
+      "id": 69,
+      "word": "nation",
+      "definition": "a country with its own government",
+      "example_sentence": "The United States is a nation made up of fifty states."
+    },
+    {
+      "id": 70,
+      "word": "observe",
+      "definition": "to watch carefully and notice details",
+      "example_sentence": "Scientists observe animals to learn about their behavior."
+    },
+    {
+      "id": 71,
+      "word": "opponent",
+      "definition": "someone who competes against you",
+      "example_sentence": "The chess player studied her opponent's moves carefully."
+    },
+    {
+      "id": 72,
+      "word": "opposite",
+      "definition": "completely different or contrary",
+      "example_sentence": "Hot and cold are opposite temperatures."
+    },
+    {
+      "id": 73,
+      "word": "ordeal",
+      "definition": "a painful or difficult experience",
+      "example_sentence": "Getting lost in the woods was quite an ordeal for the hikers."
+    },
+    {
+      "id": 74,
+      "word": "origin",
+      "definition": "the beginning or source of something",
+      "example_sentence": "The origin of the river is high up in the mountains."
+    },
+    {
+      "id": 75,
+      "word": "outcome",
+      "definition": "the result or consequence of something",
+      "example_sentence": "The outcome of the game was a victory for our team."
+    },
+    {
+      "id": 76,
+      "word": "passage",
+      "definition": "a section of text or a way through something",
+      "example_sentence": "Please read the passage and answer the questions."
+    },
+    {
+      "id": 77,
+      "word": "patient",
+      "definition": "able to wait calmly without getting upset",
+      "example_sentence": "Be patient while I explain the math problem step by step."
+    },
+    {
+      "id": 78,
+      "word": "perform",
+      "definition": "to do or carry out an action",
+      "example_sentence": "The band will perform their new song at the concert."
+    },
+    {
+      "id": 79,
+      "word": "persuade",
+      "definition": "to convince someone to do or believe something",
+      "example_sentence": "I tried to persuade my sister to help me with chores."
+    },
+    {
+      "id": 80,
+      "word": "planet",
+      "definition": "a large object in space that orbits the sun",
+      "example_sentence": "Mars is the fourth planet from the sun."
+    },
+    {
+      "id": 81,
+      "word": "pleasant",
+      "definition": "giving a feeling of happiness or satisfaction",
+      "example_sentence": "The garden had a pleasant smell of roses."
+    },
+    {
+      "id": 82,
+      "word": "population",
+      "definition": "the number of people living in a place",
+      "example_sentence": "Our town has a population of about 5,000 people."
+    },
+    {
+      "id": 83,
+      "word": "predict",
+      "definition": "to say what you think will happen in the future",
+      "example_sentence": "Can you predict which team will win the championship?"
+    },
+    {
+      "id": 84,
+      "word": "prevent",
+      "definition": "to stop something from happening",
+      "example_sentence": "Wearing a helmet can prevent head injuries while biking."
+    },
+    {
+      "id": 85,
+      "word": "primary",
+      "definition": "first in order of importance",
+      "example_sentence": "Safety is the primary concern when crossing the street."
+    },
+    {
+      "id": 86,
+      "word": "privilege",
+      "definition": "a special right or advantage",
+      "example_sentence": "It's a privilege to represent our school in the spelling bee."
+    },
+    {
+      "id": 87,
+      "word": "process",
+      "definition": "a series of actions to achieve a result",
+      "example_sentence": "Making bread is a process that takes several hours."
+    },
+    {
+      "id": 88,
+      "word": "producer",
+      "definition": "a living thing that makes its own food",
+      "example_sentence": "Plants are producers because they make food from sunlight."
+    },
+    {
+      "id": 89,
+      "word": "purpose",
+      "definition": "the reason for doing something",
+      "example_sentence": "The purpose of studying is to learn new things."
+    },
+    {
+      "id": 90,
+      "word": "rare",
+      "definition": "not found or seen very often",
+      "example_sentence": "Finding a four-leaf clover is rare and considered lucky."
+    },
+    {
+      "id": 91,
+      "word": "recognize",
+      "definition": "to identify someone or something you have seen before",
+      "example_sentence": "I recognize that song from the movie we watched."
+    },
+    {
+      "id": 92,
+      "word": "region",
+      "definition": "a particular area or part of a country",
+      "example_sentence": "The desert region gets very little rain each year."
+    },
+    {
+      "id": 93,
+      "word": "rely",
+      "definition": "to depend on someone or something",
+      "example_sentence": "Plants rely on sunlight and water to grow."
+    },
+    {
+      "id": 94,
+      "word": "repair",
+      "definition": "to fix something that is broken",
+      "example_sentence": "The mechanic will repair our car's broken engine."
+    },
+    {
+      "id": 95,
+      "word": "respect",
+      "definition": "a feeling of admiration for someone",
+      "example_sentence": "Students should show respect for their teachers."
+    },
+    {
+      "id": 96,
+      "word": "responsible",
+      "definition": "able to be trusted to do what is right",
+      "example_sentence": "My responsible older brother takes care of our pets."
+    },
+    {
+      "id": 97,
+      "word": "reverse",
+      "definition": "to turn something around or go backwards",
+      "example_sentence": "She had to reverse the car out of the driveway."
+    },
+    {
+      "id": 98,
+      "word": "ridiculous",
+      "definition": "very silly or unreasonable",
+      "example_sentence": "It would be ridiculous to wear shorts in a snowstorm."
+    },
+    {
+      "id": 99,
+      "word": "scatter",
+      "definition": "to spread things over a wide area",
+      "example_sentence": "The wind will scatter the autumn leaves across the yard."
+    },
+    {
+      "id": 100,
+      "word": "schedule",
+      "definition": "a plan that shows when things will happen",
+      "example_sentence": "According to our schedule, we have math class at 10 AM."
+    },
+    {
+      "id": 101,
+      "word": "sedimentary",
+      "definition": "formed from layers of materials that settled over time",
+      "example_sentence": "Sandstone is a sedimentary rock made from sand particles."
+    },
+    {
+      "id": 102,
+      "word": "sensitive",
+      "definition": "easily affected by small changes",
+      "example_sentence": "My sensitive skin gets sunburned very quickly."
+    },
+    {
+      "id": 103,
+      "word": "shelter",
+      "definition": "a place that provides protection from weather",
+      "example_sentence": "The cave provided shelter from the heavy rain."
+    },
+    {
+      "id": 104,
+      "word": "signal",
+      "definition": "a sign or sound that gives information",
+      "example_sentence": "The traffic light signal tells drivers when to stop and go."
+    },
+    {
+      "id": 105,
+      "word": "similar",
+      "definition": "alike but not exactly the same",
+      "example_sentence": "These two puppies look similar but have different colored spots."
+    },
+    {
+      "id": 106,
+      "word": "slumber",
+      "definition": "to sleep peacefully",
+      "example_sentence": "The baby continued to slumber despite the noise outside."
+    },
+    {
+      "id": 107,
+      "word": "solution",
+      "definition": "an answer to a problem",
+      "example_sentence": "We found a solution to fix the leaky pipe."
+    },
+    {
+      "id": 108,
+      "word": "starve",
+      "definition": "to suffer or die from lack of food",
+      "example_sentence": "Without rain, the crops will starve for water."
+    },
+    {
+      "id": 109,
+      "word": "stumble",
+      "definition": "to trip or fall while walking",
+      "example_sentence": "Be careful not to stumble over those rocks on the path."
+    },
+    {
+      "id": 110,
+      "word": "suitable",
+      "definition": "right or appropriate for a particular purpose",
+      "example_sentence": "This warm coat is suitable for cold winter weather."
+    },
+    {
+      "id": 111,
+      "word": "survey",
+      "definition": "to examine or look at something carefully",
+      "example_sentence": "The scientist will survey the forest to count the different trees."
+    },
+    {
+      "id": 112,
+      "word": "swift",
+      "definition": "moving very quickly",
+      "example_sentence": "The swift cheetah can run faster than any other land animal."
+    },
+    {
+      "id": 113,
+      "word": "symbol",
+      "definition": "something that represents or stands for something else",
+      "example_sentence": "The dove is a symbol of peace in many cultures."
+    },
+    {
+      "id": 114,
+      "word": "tackle",
+      "definition": "to deal with or work on a difficult problem",
+      "example_sentence": "Let's tackle this challenging math problem together."
+    },
+    {
+      "id": 115,
+      "word": "talent",
+      "definition": "a natural ability to do something well",
+      "example_sentence": "Sarah has a talent for drawing beautiful pictures."
+    },
+    {
+      "id": 116,
+      "word": "theory",
+      "definition": "an idea that explains how or why something happens",
+      "example_sentence": "Scientists have a theory about how dinosaurs became extinct."
+    },
+    {
+      "id": 117,
+      "word": "thrill",
+      "definition": "a feeling of excitement and pleasure",
+      "example_sentence": "Riding the roller coaster gave me such a thrill!"
+    },
+    {
+      "id": 118,
+      "word": "treasure",
+      "definition": "something very valuable and precious",
+      "example_sentence": "The pirates buried their treasure on a secret island."
+    },
+    {
+      "id": 119,
+      "word": "triumph",
+      "definition": "a great victory or success",
+      "example_sentence": "Winning the championship was a triumph for our soccer team."
+    },
+    {
+      "id": 120,
+      "word": "typical",
+      "definition": "showing the usual characteristics of something",
+      "example_sentence": "A typical day at school includes math, reading, and science."
+    },
+    {
+      "id": 121,
+      "word": "unite",
+      "definition": "to join together or become one",
+      "example_sentence": "The two classes will unite to perform the school play."
+    },
+    {
+      "id": 122,
+      "word": "unusual",
+      "definition": "not normal or common; strange",
+      "example_sentence": "It's unusual to see snow in July in most places."
+    },
+    {
+      "id": 123,
+      "word": "valuable",
+      "definition": "worth a lot of money or very useful",
+      "example_sentence": "The valuable diamond necklace sparkled in the light."
+    },
+    {
+      "id": 124,
+      "word": "vehicle",
+      "definition": "something used to transport people or things",
+      "example_sentence": "A bicycle is a vehicle that doesn't need gasoline."
+    },
+    {
+      "id": 125,
+      "word": "vision",
+      "definition": "the ability to see",
+      "example_sentence": "Eagles have excellent vision and can spot prey from far away."
+    },
+    {
+      "id": 126,
+      "word": "volunteer",
+      "definition": "someone who helps without being paid",
+      "example_sentence": "My mom is a volunteer at the local animal shelter."
+    },
+    {
+      "id": 127,
+      "word": "wander",
+      "definition": "to walk around without a specific destination",
+      "example_sentence": "We like to wander through the park and see what we discover."
+    },
+    {
+      "id": 128,
+      "word": "weather",
+      "definition": "the condition of the atmosphere at a particular time",
+      "example_sentence": "The weather today is sunny and warm, perfect for a picnic."
+    },
+    {
+      "id": 129,
+      "word": "wisdom",
+      "definition": "knowledge gained from experience and good judgment",
+      "example_sentence": "Grandpa shared his wisdom about how to plant a successful garden."
+    },
+    {
+      "id": 130,
+      "word": "wit",
+      "definition": "mental sharpness and cleverness",
+      "example_sentence": "She used her quick wit to solve the riddle in seconds."
+    },
+    {
+      "id": 131,
+      "word": "molecule",
+      "definition": "the smallest part of a substance that still has its properties",
+      "example_sentence": "A water molecule is made up of hydrogen and oxygen atoms."
+    },
+    {
+      "id": 132,
+      "word": "substance",
+      "definition": "a particular type of matter with specific properties",
+      "example_sentence": "Salt is a substance that dissolves easily in water."
+    },
+    {
+      "id": 133,
+      "word": "experiment",
+      "definition": "a test to find out if an idea is correct",
+      "example_sentence": "Our science experiment tested which liquids freeze fastest."
+    },
+    {
+      "id": 134,
+      "word": "erosion",
+      "definition": "the process of wearing away rocks and soil by water or wind",
+      "example_sentence": "Beach erosion happens when waves wash sand away from the shore."
+    },
+    {
+      "id": 135,
+      "word": "igneous",
+      "definition": "formed from cooled and hardened melted rock",
+      "example_sentence": "Granite is an igneous rock that formed from cooled magma."
+    },
+    {
+      "id": 136,
+      "word": "consumer",
+      "definition": "a living thing that eats other living things for food",
+      "example_sentence": "A rabbit is a consumer because it eats plants for energy."
+    },
+    {
+      "id": 137,
+      "word": "organism",
+      "definition": "any living thing, such as a plant, animal, or bacteria",
+      "example_sentence": "Every organism in the pond depends on clean water to survive."
+    },
+    {
+      "id": 138,
+      "word": "element",
+      "definition": "a pure substance made of only one type of atom",
+      "example_sentence": "Gold is an element that doesn't rust or tarnish."
+    },
+    {
+      "id": 139,
+      "word": "evidence",
+      "definition": "facts or information that prove something is true",
+      "example_sentence": "The footprints in the mud were evidence that deer visited our garden."
+    },
+    {
+      "id": 140,
+      "word": "conclude",
+      "definition": "to decide something based on facts or evidence",
+      "example_sentence": "From our experiment, we can conclude that plants need sunlight to grow."
+    },
+    {
+      "id": 141,
+      "word": "analyze",
+      "definition": "to study something carefully to understand it better",
+      "example_sentence": "Let's analyze the data to see which plant grew the tallest."
+    },
+    {
+      "id": 142,
+      "word": "structure",
+      "definition": "the way something is built or organized",
+      "example_sentence": "The structure of a bird's wing helps it fly efficiently."
+    },
+    {
+      "id": 143,
+      "word": "function",
+      "definition": "the job or purpose of something",
+      "example_sentence": "The function of roots is to absorb water and nutrients for the plant."
+    },
+    {
+      "id": 144,
+      "word": "establish",
+      "definition": "to set up or create something",
+      "example_sentence": "The pioneers worked hard to establish a new town in the wilderness."
+    },
+    {
+      "id": 145,
+      "word": "emerge",
+      "definition": "to come out or appear from somewhere",
+      "example_sentence": "The butterfly will emerge from its cocoon in the spring."
+    },
+    {
+      "id": 146,
+      "word": "contribute",
+      "definition": "to give or add something to help",
+      "example_sentence": "Everyone can contribute ideas to make our class project better."
+    },
+    {
+      "id": 147,
+      "word": "interpret",
+      "definition": "to explain the meaning of something",
+      "example_sentence": "Can you interpret what this poem is trying to say?"
+    },
+    {
+      "id": 148,
+      "word": "factor",
+      "definition": "something that influences a result or decision",
+      "example_sentence": "Sunlight is an important factor in how well plants grow."
+    },
+    {
+      "id": 149,
+      "word": "vary",
+      "definition": "to change or be different",
+      "example_sentence": "The colors of autumn leaves vary from red to yellow to brown."
+    },
+    {
+      "id": 150,
+      "word": "obtain",
+      "definition": "to get or acquire something",
+      "example_sentence": "We need to obtain permission before going on the field trip."
+    },
+    {
+      "id": 151,
+      "word": "circumstances",
+      "definition": "the conditions or facts that affect a situation",
+      "example_sentence": "Under normal circumstances, we walk to school every day."
+    },
+    {
+      "id": 152,
+      "word": "significant",
+      "definition": "important or meaningful",
+      "example_sentence": "Getting an A on the test was a significant achievement for Tim."
+    },
+    {
+      "id": 153,
+      "word": "maintain",
+      "definition": "to keep something in good condition",
+      "example_sentence": "We must maintain our bikes by keeping them clean and oiled."
+    },
+    {
+      "id": 154,
+      "word": "sequence",
+      "definition": "a particular order of things or events",
+      "example_sentence": "Follow the sequence of steps to solve the math problem correctly."
+    },
+    {
+      "id": 155,
+      "word": "distribute",
+      "definition": "to give out or spread things to different people or places",
+      "example_sentence": "The teacher will distribute the art supplies to each student."
+    },
+    {
+      "id": 156,
+      "word": "priority",
+      "definition": "something that is more important than other things",
+      "example_sentence": "Studying for the big test should be your top priority this week."
+    },
+    {
+      "id": 157,
+      "word": "adequate",
+      "definition": "enough or satisfactory for what is needed",
+      "example_sentence": "Make sure you get adequate sleep before the big game tomorrow."
+    },
+    {
+      "id": 158,
+      "word": "concept",
+      "definition": "an idea or principle",
+      "example_sentence": "The concept of gravity explains why things fall to the ground."
+    },
+    {
+      "id": 159,
+      "word": "source",
+      "definition": "the place where something comes from",
+      "example_sentence": "The sun is our main source of light and heat on Earth."
+    },
+    {
+      "id": 160,
+      "word": "conduct",
+      "definition": "to carry out or perform an activity",
+      "example_sentence": "The scientist will conduct an experiment to test her hypothesis."
+    },
+    {
+      "id": 161,
+      "word": "furthermore",
+      "definition": "in addition to what has already been said",
+      "example_sentence": "The weather is perfect for a picnic; furthermore, we have all day free."
+    },
+    {
+      "id": 162,
+      "word": "nevertheless",
+      "definition": "despite what has just been said",
+      "example_sentence": "It was raining hard; nevertheless, we decided to go hiking."
+    },
+    {
+      "id": 163,
+      "word": "category",
+      "definition": "a group of things that are similar",
+      "example_sentence": "Dogs and cats belong to the category of pets."
+    },
+    {
+      "id": 164,
+      "word": "impact",
+      "definition": "to have a strong effect on something",
+      "example_sentence": "The heavy rains will impact our plans for the outdoor concert."
+    },
+    {
+      "id": 165,
+      "word": "construct",
+      "definition": "to build or make something",
+      "example_sentence": "The students will construct a model bridge using popsicle sticks."
+    },
+    {
+      "id": 166,
+      "word": "approximately",
+      "definition": "close to a number or amount but not exactly",
+      "example_sentence": "There are approximately 100 students in our grade level."
+    },
+    {
+      "id": 167,
+      "word": "specific",
+      "definition": "clearly defined or identified; particular",
+      "example_sentence": "Please give me a specific example of what you mean."
+    },
+    {
+      "id": 168,
+      "word": "generate",
+      "definition": "to produce or create something",
+      "example_sentence": "Wind turbines generate electricity from the power of moving air."
+    },
+    {
+      "id": 169,
+      "word": "accurate",
+      "definition": "correct and exact",
+      "example_sentence": "It's important to give accurate measurements when following a recipe."
+    },
+    {
+      "id": 170,
+      "word": "essential",
+      "definition": "absolutely necessary; extremely important",
+      "example_sentence": "Water is essential for all living things to survive."
+    },
+    {
+      "id": 171,
+      "word": "respond",
+      "definition": "to answer or react to something",
+      "example_sentence": "Please respond to the teacher's question when called upon."
+    },
+    {
+      "id": 172,
+      "word": "complex",
+      "definition": "having many parts; complicated",
+      "example_sentence": "The human brain is a complex organ with billions of nerve cells."
+    },
+    {
+      "id": 173,
+      "word": "occur",
+      "definition": "to happen or take place",
+      "example_sentence": "Thunderstorms usually occur during hot summer afternoons."
+    },
+    {
+      "id": 174,
+      "word": "indicate",
+      "definition": "to show or point out something",
+      "example_sentence": "Dark clouds indicate that rain is coming soon."
+    },
+    {
+      "id": 175,
+      "word": "require",
+      "definition": "to need something",
+      "example_sentence": "This recipe will require three cups of flour and two eggs."
+    },
+    {
+      "id": 176,
+      "word": "achieve",
+      "definition": "to successfully complete or accomplish something",
+      "example_sentence": "With hard work and practice, you can achieve your goals."
+    },
+    {
+      "id": 177,
+      "word": "component",
+      "definition": "a part that makes up something larger",
+      "example_sentence": "Each component of the bicycle has an important job to do."
+    },
+    {
+      "id": 178,
+      "word": "alternative",
+      "definition": "another choice or option",
+      "example_sentence": "If it rains, we have an alternative plan to play games indoors."
+    },
+    {
+      "id": 179,
+      "word": "technique",
+      "definition": "a particular way of doing something skillfully",
+      "example_sentence": "The artist used a special technique to make the painting look realistic."
+    },
+    {
+      "id": 180,
+      "word": "efficient",
+      "definition": "working well without wasting time or energy",
+      "example_sentence": "The new dishwasher is very efficient and saves both water and electricity."
+    },
+    {
+      "id": 181,
+      "word": "external",
+      "definition": "on the outside of something",
+      "example_sentence": "The external walls of the house are painted blue."
+    },
+    {
+      "id": 182,
+      "word": "internal",
+      "definition": "on the inside of something",
+      "example_sentence": "The doctor used a special camera to see the internal organs."
+    },
+    {
+      "id": 183,
+      "word": "positive",
+      "definition": "good, helpful, or optimistic",
+      "example_sentence": "Her positive attitude helped the team work better together."
+    },
+    {
+      "id": 184,
+      "word": "negative",
+      "definition": "bad, harmful, or pessimistic",
+      "example_sentence": "The negative effects of pollution harm the environment."
+    },
+    {
+      "id": 185,
+      "word": "benefit",
+      "definition": "something good or helpful that you get",
+      "example_sentence": "One benefit of exercise is that it makes your muscles stronger."
+    },
+    {
+      "id": 186,
+      "word": "create",
+      "definition": "to make something new",
+      "example_sentence": "The artist will create a beautiful sculpture from clay."
+    },
+    {
+      "id": 187,
+      "word": "design",
+      "definition": "to plan how something will look or work",
+      "example_sentence": "The architect will design a new playground for our school."
+    },
+    {
+      "id": 188,
+      "word": "major",
+      "definition": "very important or large",
+      "example_sentence": "Winning the championship was a major achievement for our team."
+    },
+    {
+      "id": 189,
+      "word": "minor",
+      "definition": "small or not very important",
+      "example_sentence": "Don't worry about that minor mistake; it's easy to fix."
+    },
+    {
+      "id": 190,
+      "word": "recent",
+      "definition": "happening not long ago",
+      "example_sentence": "The recent snowstorm caused school to be cancelled yesterday."
+    },
+    {
+      "id": 191,
+      "word": "previous",
+      "definition": "happening before the current time",
+      "example_sentence": "In the previous chapter, we learned about butterflies."
+    },
+    {
+      "id": 192,
+      "word": "current",
+      "definition": "happening now",
+      "example_sentence": "The current weather is perfect for playing outside."
+    },
+    {
+      "id": 193,
+      "word": "regular",
+      "definition": "happening at the same times or in the same way",
+      "example_sentence": "We have regular fire drills once a month at school."
+    },
+    {
+      "id": 194,
+      "word": "available",
+      "definition": "able to be used or obtained",
+      "example_sentence": "Extra pencils are available in the supply box if you need one."
+    },
+    {
+      "id": 195,
+      "word": "prepare",
+      "definition": "to get ready for something",
+      "example_sentence": "We need to prepare our costumes for the school play."
+    },
+    {
+      "id": 196,
+      "word": "purpose",
+      "definition": "to intend or plan to do something",
+      "example_sentence": "I purpose to finish my homework before watching TV."
+    },
+    {
+      "id": 197,
+      "word": "definitely",
+      "definition": "certainly and without doubt",
+      "example_sentence": "I will definitely attend your birthday party on Saturday."
+    },
+    {
+      "id": 198,
+      "word": "particularly",
+      "definition": "especially or more than usual",
+      "example_sentence": "I particularly enjoy reading mystery books over other genres."
+    },
+    {
+      "id": 199,
+      "word": "originally",
+      "definition": "at first, in the beginning",
+      "example_sentence": "The house was originally painted white, but now it's blue."
+    },
+    {
+      "id": 200,
+      "word": "eventually",
+      "definition": "in the end, after some time",
+      "example_sentence": "If you keep practicing, you will eventually learn to ride the bike."
+    }
+  ],
+  "text_list": [
+    "ability",
+    "absorb",
+    "ancient",
+    "approach",
+    "arrange",
+    "arctic",
+    "attitude",
+    "attract",
+    "average",
+    "bold",
+    "border",
+    "brief",
+    "brilliant",
+    "capture",
+    "certain",
+    "climate",
+    "clever",
+    "coast",
+    "community",
+    "compare",
+    "consider",
+    "contain",
+    "continent",
+    "convince",
+    "coward",
+    "custom",
+    "defend",
+    "delicate",
+    "describe",
+    "develop",
+    "diagram",
+    "distant",
+    "ecosystem",
+    "elegant",
+    "enable",
+    "energy",
+    "examine",
+    "experience",
+    "explore",
+    "fatal",
+    "fierce",
+    "flexible",
+    "fortunate",
+    "fossil",
+    "frail",
+    "furious",
+    "globe",
+    "gradual",
+    "gravity",
+    "habitat",
+    "harsh",
+    "hypothesis",
+    "identify",
+    "impact",
+    "individual",
+    "intelligent",
+    "intend",
+    "journey",
+    "launch",
+    "limit",
+    "locate",
+    "loyal",
+    "magnificent",
+    "method",
+    "mineral",
+    "misery",
+    "moisture",
+    "mystify",
+    "nation",
+    "observe",
+    "opponent",
+    "opposite",
+    "ordeal",
+    "origin",
+    "outcome",
+    "passage",
+    "patient",
+    "perform",
+    "persuade",
+    "planet",
+    "pleasant",
+    "population",
+    "predict",
+    "prevent",
+    "primary",
+    "privilege",
+    "process",
+    "producer",
+    "purpose",
+    "rare",
+    "recognize",
+    "region",
+    "rely",
+    "repair",
+    "respect",
+    "responsible",
+    "reverse",
+    "ridiculous",
+    "scatter",
+    "schedule",
+    "sedimentary",
+    "sensitive",
+    "shelter",
+    "signal",
+    "similar",
+    "slumber",
+    "solution",
+    "starve",
+    "stumble",
+    "suitable",
+    "survey",
+    "swift",
+    "symbol",
+    "tackle",
+    "talent",
+    "theory",
+    "thrill",
+    "treasure",
+    "triumph",
+    "typical",
+    "unite",
+    "unusual",
+    "valuable",
+    "vehicle",
+    "vision",
+    "volunteer",
+    "wander",
+    "weather",
+    "wisdom",
+    "wit",
+    "molecule",
+    "substance",
+    "experiment",
+    "erosion",
+    "igneous",
+    "consumer",
+    "organism",
+    "element",
+    "evidence",
+    "conclude",
+    "analyze",
+    "structure",
+    "function",
+    "establish",
+    "emerge",
+    "contribute",
+    "interpret",
+    "factor",
+    "vary",
+    "obtain",
+    "circumstances",
+    "significant",
+    "maintain",
+    "sequence",
+    "distribute",
+    "priority",
+    "adequate",
+    "concept",
+    "source",
+    "conduct",
+    "furthermore",
+    "nevertheless",
+    "category",
+    "impact",
+    "construct",
+    "approximately",
+    "specific",
+    "generate",
+    "accurate",
+    "essential",
+    "respond",
+    "complex",
+    "occur",
+    "indicate",
+    "require",
+    "achieve",
+    "component",
+    "alternative",
+    "technique",
+    "efficient",
+    "external",
+    "internal",
+    "positive",
+    "negative",
+    "benefit",
+    "create",
+    "design",
+    "major",
+    "minor",
+    "recent",
+    "previous",
+    "current",
+    "regular",
+    "available",
+    "prepare",
+    "purpose",
+    "definitely",
+    "particularly",
+    "originally",
+    "eventually"
+  ],
+  "output_file_list": [
+    "audio/word_001_ability.mp3",
+    "audio/word_002_absorb.mp3",
+    "audio/word_003_ancient.mp3",
+    "audio/word_004_approach.mp3",
+    "audio/word_005_arrange.mp3",
+    "audio/word_006_arctic.mp3",
+    "audio/word_007_attitude.mp3",
+    "audio/word_008_attract.mp3",
+    "audio/word_009_average.mp3",
+    "audio/word_010_bold.mp3",
+    "audio/word_011_border.mp3",
+    "audio/word_012_brief.mp3",
+    "audio/word_013_brilliant.mp3",
+    "audio/word_014_capture.mp3",
+    "audio/word_015_certain.mp3",
+    "audio/word_016_climate.mp3",
+    "audio/word_017_clever.mp3",
+    "audio/word_018_coast.mp3",
+    "audio/word_019_community.mp3",
+    "audio/word_020_compare.mp3",
+    "audio/word_021_consider.mp3",
+    "audio/word_022_contain.mp3",
+    "audio/word_023_continent.mp3",
+    "audio/word_024_convince.mp3",
+    "audio/word_025_coward.mp3",
+    "audio/word_026_custom.mp3",
+    "audio/word_027_defend.mp3",
+    "audio/word_028_delicate.mp3",
+    "audio/word_029_describe.mp3",
+    "audio/word_030_develop.mp3",
+    "audio/word_031_diagram.mp3",
+    "audio/word_032_distant.mp3",
+    "audio/word_033_ecosystem.mp3",
+    "audio/word_034_elegant.mp3",
+    "audio/word_035_enable.mp3",
+    "audio/word_036_energy.mp3",
+    "audio/word_037_examine.mp3",
+    "audio/word_038_experience.mp3",
+    "audio/word_039_explore.mp3",
+    "audio/word_040_fatal.mp3",
+    "audio/word_041_fierce.mp3",
+    "audio/word_042_flexible.mp3",
+    "audio/word_043_fortunate.mp3",
+    "audio/word_044_fossil.mp3",
+    "audio/word_045_frail.mp3",
+    "audio/word_046_furious.mp3",
+    "audio/word_047_globe.mp3",
+    "audio/word_048_gradual.mp3",
+    "audio/word_049_gravity.mp3",
+    "audio/word_050_habitat.mp3",
+    "audio/word_051_harsh.mp3",
+    "audio/word_052_hypothesis.mp3",
+    "audio/word_053_identify.mp3",
+    "audio/word_054_impact.mp3",
+    "audio/word_055_individual.mp3",
+    "audio/word_056_intelligent.mp3",
+    "audio/word_057_intend.mp3",
+    "audio/word_058_journey.mp3",
+    "audio/word_059_launch.mp3",
+    "audio/word_060_limit.mp3",
+    "audio/word_061_locate.mp3",
+    "audio/word_062_loyal.mp3",
+    "audio/word_063_magnificent.mp3",
+    "audio/word_064_method.mp3",
+    "audio/word_065_mineral.mp3",
+    "audio/word_066_misery.mp3",
+    "audio/word_067_moisture.mp3",
+    "audio/word_068_mystify.mp3",
+    "audio/word_069_nation.mp3",
+    "audio/word_070_observe.mp3",
+    "audio/word_071_opponent.mp3",
+    "audio/word_072_opposite.mp3",
+    "audio/word_073_ordeal.mp3",
+    "audio/word_074_origin.mp3",
+    "audio/word_075_outcome.mp3",
+    "audio/word_076_passage.mp3",
+    "audio/word_077_patient.mp3",
+    "audio/word_078_perform.mp3",
+    "audio/word_079_persuade.mp3",
+    "audio/word_080_planet.mp3",
+    "audio/word_081_pleasant.mp3",
+    "audio/word_082_population.mp3",
+    "audio/word_083_predict.mp3",
+    "audio/word_084_prevent.mp3",
+    "audio/word_085_primary.mp3",
+    "audio/word_086_privilege.mp3",
+    "audio/word_087_process.mp3",
+    "audio/word_088_producer.mp3",
+    "audio/word_089_purpose.mp3",
+    "audio/word_090_rare.mp3",
+    "audio/word_091_recognize.mp3",
+    "audio/word_092_region.mp3",
+    "audio/word_093_rely.mp3",
+    "audio/word_094_repair.mp3",
+    "audio/word_095_respect.mp3",
+    "audio/word_096_responsible.mp3",
+    "audio/word_097_reverse.mp3",
+    "audio/word_098_ridiculous.mp3",
+    "audio/word_099_scatter.mp3",
+    "audio/word_100_schedule.mp3",
+    "audio/word_101_sedimentary.mp3",
+    "audio/word_102_sensitive.mp3",
+    "audio/word_103_shelter.mp3",
+    "audio/word_104_signal.mp3",
+    "audio/word_105_similar.mp3",
+    "audio/word_106_slumber.mp3",
+    "audio/word_107_solution.mp3",
+    "audio/word_108_starve.mp3",
+    "audio/word_109_stumble.mp3",
+    "audio/word_110_suitable.mp3",
+    "audio/word_111_survey.mp3",
+    "audio/word_112_swift.mp3",
+    "audio/word_113_symbol.mp3",
+    "audio/word_114_tackle.mp3",
+    "audio/word_115_talent.mp3",
+    "audio/word_116_theory.mp3",
+    "audio/word_117_thrill.mp3",
+    "audio/word_118_treasure.mp3",
+    "audio/word_119_triumph.mp3",
+    "audio/word_120_typical.mp3",
+    "audio/word_121_unite.mp3",
+    "audio/word_122_unusual.mp3",
+    "audio/word_123_valuable.mp3",
+    "audio/word_124_vehicle.mp3",
+    "audio/word_125_vision.mp3",
+    "audio/word_126_volunteer.mp3",
+    "audio/word_127_wander.mp3",
+    "audio/word_128_weather.mp3",
+    "audio/word_129_wisdom.mp3",
+    "audio/word_130_wit.mp3",
+    "audio/word_131_molecule.mp3",
+    "audio/word_132_substance.mp3",
+    "audio/word_133_experiment.mp3",
+    "audio/word_134_erosion.mp3",
+    "audio/word_135_igneous.mp3",
+    "audio/word_136_consumer.mp3",
+    "audio/word_137_organism.mp3",
+    "audio/word_138_element.mp3",
+    "audio/word_139_evidence.mp3",
+    "audio/word_140_conclude.mp3",
+    "audio/word_141_analyze.mp3",
+    "audio/word_142_structure.mp3",
+    "audio/word_143_function.mp3",
+    "audio/word_144_establish.mp3",
+    "audio/word_145_emerge.mp3",
+    "audio/word_146_contribute.mp3",
+    "audio/word_147_interpret.mp3",
+    "audio/word_148_factor.mp3",
+    "audio/word_149_vary.mp3",
+    "audio/word_150_obtain.mp3",
+    "audio/word_151_circumstances.mp3",
+    "audio/word_152_significant.mp3",
+    "audio/word_153_maintain.mp3",
+    "audio/word_154_sequence.mp3",
+    "audio/word_155_distribute.mp3",
+    "audio/word_156_priority.mp3",
+    "audio/word_157_adequate.mp3",
+    "audio/word_158_concept.mp3",
+    "audio/word_159_source.mp3",
+    "audio/word_160_conduct.mp3",
+    "audio/word_161_furthermore.mp3",
+    "audio/word_162_nevertheless.mp3",
+    "audio/word_163_category.mp3",
+    "audio/word_164_impact.mp3",
+    "audio/word_165_construct.mp3",
+    "audio/word_166_approximately.mp3",
+    "audio/word_167_specific.mp3",
+    "audio/word_168_generate.mp3",
+    "audio/word_169_accurate.mp3",
+    "audio/word_170_essential.mp3",
+    "audio/word_171_respond.mp3",
+    "audio/word_172_complex.mp3",
+    "audio/word_173_occur.mp3",
+    "audio/word_174_indicate.mp3",
+    "audio/word_175_require.mp3",
+    "audio/word_176_achieve.mp3",
+    "audio/word_177_component.mp3",
+    "audio/word_178_alternative.mp3",
+    "audio/word_179_technique.mp3",
+    "audio/word_180_efficient.mp3",
+    "audio/word_181_external.mp3",
+    "audio/word_182_internal.mp3",
+    "audio/word_183_positive.mp3",
+    "audio/word_184_negative.mp3",
+    "audio/word_185_benefit.mp3",
+    "audio/word_186_create.mp3",
+    "audio/word_187_design.mp3",
+    "audio/word_188_major.mp3",
+    "audio/word_189_minor.mp3",
+    "audio/word_190_recent.mp3",
+    "audio/word_191_previous.mp3",
+    "audio/word_192_current.mp3",
+    "audio/word_193_regular.mp3",
+    "audio/word_194_available.mp3",
+    "audio/word_195_prepare.mp3",
+    "audio/word_196_purpose.mp3",
+    "audio/word_197_definitely.mp3",
+    "audio/word_198_particularly.mp3",
+    "audio/word_199_originally.mp3",
+    "audio/word_200_eventually.mp3"
+  ]
+}
