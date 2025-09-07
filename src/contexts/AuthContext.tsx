@@ -1,20 +1,20 @@
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react'
 import { User as SupabaseUser } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
-import { User, UserGamification, DailyGoal } from '@/types'
+import { User, UserGamification } from '@/types'
 import toast from 'react-hot-toast'
 
 interface AuthContextType {
   user: SupabaseUser | null
   profile: User | null
   gamification: UserGamification | null
-  dailyGoal: DailyGoal | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<any>
   signUp: (email: string, password: string) => Promise<any>
   signOut: () => Promise<void>
   updateProfile: (updates: Partial<User>) => Promise<void>
   refreshProfile: () => Promise<void>
+  initializeUser: (profileData: Partial<User>) => Promise<any>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -23,14 +23,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [profile, setProfile] = useState<User | null>(null)
   const [gamification, setGamification] = useState<UserGamification | null>(null)
-  const [dailyGoal, setDailyGoal] = useState<DailyGoal | null>(null)
   const [loading, setLoading] = useState(true)
   
   // Request deduplication: track ongoing profile requests by userId
   const ongoingRequests = useRef<Map<string, Promise<any>>>(new Map())
   
   // Profile data cache: store profile data in memory to avoid redundant API calls
-  const profileCache = useRef<Map<string, { profile: User; gamification: UserGamification; dailyGoal: DailyGoal; timestamp: number }>>(new Map())
+  const profileCache = useRef<Map<string, { profile: User; gamification: UserGamification; timestamp: number }>>(new Map())
 
   // Load user on mount
   useEffect(() => {
@@ -42,7 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         timeoutId = setTimeout(() => {
           console.warn('Auth loading timeout - forcing loading to false')
           setLoading(false)
-        }, 10000) // 10 seconds timeout
+        }, 5000) // 5 seconds timeout
         
         const { data: { user } } = await supabase.auth.getUser()
         setUser(user)
@@ -76,7 +75,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else {
           setProfile(null)
           setGamification(null)
-          setDailyGoal(null)
           setLoading(false)
         }
       }
@@ -98,7 +96,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('Using cached profile data for user:', userId)
       setProfile(cached.profile)
       setGamification(cached.gamification)
-      setDailyGoal(cached.dailyGoal)
       return
     }
 
@@ -114,16 +111,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log('Loading user profile for:', userId)
         
-        // Add 3 second timeout to prevent hanging
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Profile timeout')), 3000)
-        )
-        
-        const profilePromise = supabase.functions.invoke('user-profile', {
-          method: 'GET'
+        // Use direct fetch instead of supabase.functions.invoke (which hangs)
+        // Use the anon key for now - the function will extract user ID from the request context
+        const response = await fetch('https://zxxkutexabspjiwghsvn.supabase.co/functions/v1/user-profile', {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4eGt1dGV4YWJzcGppd2doc3ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3OTYwNzMsImV4cCI6MjA2ODM3MjA3M30.us8-BQW50RsdhMfMtTPnTshexKBBv7qisCB6sSQEMQk',
+            'Content-Type': 'application/json',
+            'X-User-ID': userId // Pass the user ID directly
+          }
         })
-        
-        const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as any
+
+        const data = await response.json()
+        const error = response.ok ? null : new Error(`HTTP ${response.status}`)
 
         if (error) {
           console.error('Error loading user profile:', error)
@@ -135,7 +135,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const profileData = {
             profile: data.data.profile,
             gamification: data.data.gamification,
-            dailyGoal: data.data.daily_goal,
             timestamp: now
           }
           
@@ -145,7 +144,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Set the state
           setProfile(profileData.profile)
           setGamification(profileData.gamification)
-          setDailyGoal(profileData.dailyGoal)
           
           console.log('Profile loaded and cached for user:', userId)
         }
@@ -210,7 +208,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null)
     setProfile(null)
     setGamification(null)
-    setDailyGoal(null)
     toast.success('Signed out successfully')
   }
 
@@ -245,17 +242,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const initializeUser = async (profileData: Partial<User>) => {
+    try {
+      // Use direct fetch instead of supabase.functions.invoke (which hangs)
+      // Use the anon key and pass user ID in header
+      const response = await fetch('https://zxxkutexabspjiwghsvn.supabase.co/functions/v1/user-initialize', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4eGt1dGV4YWJzcGppd2doc3ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI3OTYwNzMsImV4cCI6MjA2ODM3MjA3M30.us8-BQW50RsdhMfMtTPnTshexKBBv7qisCB6sSQEMQk',
+          'Content-Type': 'application/json',
+          'X-User-ID': user?.id || '' // Pass the user ID directly
+        },
+        body: JSON.stringify(profileData)
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        console.error('Error initializing user:', data)
+        throw new Error(`HTTP ${response.status}: ${data.message || 'Unknown error'}`)
+      }
+
+      if (data?.data?.is_new_user) {
+        // Clear cache to force reload of profile data
+        profileCache.current.delete(user?.id || '')
+        await loadUserProfile(user?.id || '')
+        toast.success('Welcome! Your account has been set up.')
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error initializing user:', error)
+      throw error
+    }
+  }
+
   const value: AuthContextType = {
     user,
     profile,
     gamification,
-    dailyGoal,
     loading,
     signIn,
     signUp,
     signOut,
     updateProfile,
-    refreshProfile
+    refreshProfile,
+    initializeUser
   }
 
   return (

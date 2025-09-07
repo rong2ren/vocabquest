@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import toast from 'react-hot-toast'
 
 export function AuthCallbackPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { initializeUser } = useAuth()
 
   useEffect(() => {
     async function handleAuthCallback() {
@@ -26,7 +28,18 @@ export function AuthCallbackPage() {
           }
           
           if (data.session) {
-            // Successfully signed in
+            // Successfully signed in - now initialize user if needed
+            try {
+              await initializeUser({
+                full_name: data.user.user_metadata?.full_name || 'Student User',
+                role: 'student',
+                grade_level: 4
+              })
+            } catch (initError) {
+              console.error('Error initializing user:', initError)
+              // Don't block navigation if initialization fails
+            }
+            
             toast.success('Welcome to VocabQuest!')
             navigate('/dashboard')
             return

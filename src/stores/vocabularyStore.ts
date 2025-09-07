@@ -205,11 +205,20 @@ export const useVocabularyStore = create<VocabularyStore>((set, get) => ({
             ...state.userProgress,
             [wordId]: {
               ...state.userProgress[wordId],
+              id: state.userProgress[wordId]?.id || wordId, // Use existing id or fallback
+              user_id: state.userProgress[wordId]?.user_id || '', // Will be set properly
+              word_id: wordId,
               current_level: progress.current_level,
+              ease_factor: progress.ease_factor || 2.5,
+              interval_days: progress.interval_hours || 1,
               next_review: progress.next_review,
+              consecutive_correct: progress.consecutive_correct,
+              total_attempts: state.userProgress[wordId]?.total_attempts || 1,
+              total_correct: state.userProgress[wordId]?.total_correct || (isCorrect ? 1 : 0),
               success_rate: progress.success_rate,
+              first_learned: state.userProgress[wordId]?.first_learned || new Date().toISOString(),
               is_learned: progress.is_learned,
-              consecutive_correct: progress.consecutive_correct
+              created_at: state.userProgress[wordId]?.created_at || new Date().toISOString()
             } as UserProgress
           }
         }))

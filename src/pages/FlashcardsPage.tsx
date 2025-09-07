@@ -6,12 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { 
   ArrowLeft, 
   Volume2, 
-  Eye, 
-  EyeOff, 
   Check, 
   X, 
   RotateCcw,
-  Lightbulb,
   BookOpen,
   Play
 } from 'lucide-react'
@@ -23,42 +20,63 @@ type DifficultyRating = 'easy' | 'good' | 'hard'
 
 export function FlashcardsPage() {
   const navigate = useNavigate()
-  const { user } = useAuth()
+  const { user, refreshProfile } = useAuth()
   const {
-    currentWord,
-    currentSessionWords,
-    sessionMode,
-    startLearningSession,
-    getNextWord,
     updateProgress,
-    words
+    words,
+    vocabularyLists,
+    fetchVocabularyLists,
+    fetchWordsForList,
+    setCurrentList
   } = useVocabularyStore()
 
   const [currentSide, setCurrentSide] = useState<FlashcardSide>('front')
-  const [showHint, setShowHint] = useState(false)
-  const [sessionStarted, setSessionStarted] = useState(false)
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    // Load last position from localStorage, default to 0
+    const savedIndex = localStorage.getItem('flashcards-last-position')
+    return savedIndex ? parseInt(savedIndex, 10) : 0
+  })
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
     total: 0,
     startTime: Date.now()
   })
 
+  // Simple initialization - just load words if not already loaded
   useEffect(() => {
-    if (!sessionStarted && words.length > 0) {
-      startSession()
+    const loadData = async () => {
+      if (words.length === 0 && user) {
+        try {
+          // Load vocabulary lists if needed
+          if (vocabularyLists.length === 0) {
+            await fetchVocabularyLists()
+          }
+          
+          // Get the default list and load words
+          const { vocabularyLists: currentLists } = useVocabularyStore.getState()
+          if (currentLists.length > 0) {
+            const defaultList = currentLists.find(list => list.is_default) || currentLists[0]
+            setCurrentList(defaultList)
+            await fetchWordsForList(defaultList.id)
+          }
+          
+        } catch (error) {
+          console.error('Error loading data:', error)
+          toast.error('Failed to load vocabulary data')
+        }
+      }
     }
-  }, [words, sessionStarted])
+    
+    loadData()
+  }, [user])
 
-  const startSession = () => {
-    startLearningSession('flashcards')
-    setSessionStarted(true)
-    setSessionStats({
-      correct: 0,
-      total: 0,
-      startTime: Date.now()
-    })
-  }
+  // Save current position to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('flashcards-last-position', currentIndex.toString())
+  }, [currentIndex])
+
+  // Get current word from the words array using currentIndex
+  const currentWord = words[currentIndex] || null
 
   const flipCard = () => {
     setCurrentSide(currentSide === 'front' ? 'back' : 'front')
@@ -80,38 +98,58 @@ export function FlashcardsPage() {
     const isCorrect = rating === 'easy' || rating === 'good'
     const responseTime = (Date.now() - sessionStats.startTime) / 1000
 
+    // Update progress in backend
     await updateProgress(currentWord.id, isCorrect, responseTime)
     
+    // Update session stats
     setSessionStats(prev => ({
       ...prev,
       correct: prev.correct + (isCorrect ? 1 : 0),
       total: prev.total + 1
     }))
 
-    const nextWord = getNextWord()
-    if (nextWord) {
+    // Move to next word
+    if (currentIndex < words.length - 1) {
       setCurrentIndex(prev => prev + 1)
       setCurrentSide('front')
-      setShowHint(false)
     } else {
-      // Session complete
+      // Session complete - went through all words
       const accuracy = Math.round((sessionStats.correct / sessionStats.total) * 100)
       toast.success(`Session complete! Accuracy: ${accuracy}%`)
+      
+      // Refresh profile to show updated stats immediately
+      await refreshProfile()
+      
       navigate('/dashboard')
     }
   }
 
-  const resetCard = () => {
-    setCurrentSide('front')
-    setShowHint(false)
-  }
 
-  if (!currentWord && sessionMode === 'flashcards') {
+  // Show loading if no words loaded yet
+  if (words.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center">
         <div className="text-center">
           <LoadingSpinner size="lg" />
-          <p className="mt-4 text-gray-600">Preparing your flashcards...</p>
+          <p className="mt-4 text-gray-600">Loading flashcards...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show completion message if we've gone through all words
+  if (currentIndex >= words.length) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">All Done!</h2>
+          <p className="text-gray-600 mb-6">You've completed all {words.length} flashcards!</p>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Back to Dashboard
+          </button>
         </div>
       </div>
     )
@@ -127,7 +165,15 @@ export function FlashcardsPage() {
             Start your flashcard session to learn new vocabulary words!
           </p>
           <button
-            onClick={startSession}
+            onClick={() => {
+              // Start from saved position (or word 1 if no saved position)
+              setCurrentSide('front')
+              setSessionStats({
+                correct: 0,
+                total: 0,
+                startTime: Date.now()
+              })
+            }}
             className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 mx-auto"
           >
             <Play className="w-5 h-5" />
@@ -138,7 +184,7 @@ export function FlashcardsPage() {
     )
   }
 
-  const progress = ((currentIndex + 1) / currentSessionWords.length) * 100
+  const progress = ((currentIndex + 1) / words.length) * 100
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
@@ -147,7 +193,10 @@ export function FlashcardsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={async () => {
+                await refreshProfile()
+                navigate('/dashboard')
+              }}
               className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -157,8 +206,45 @@ export function FlashcardsPage() {
             <div className="text-center">
               <h1 className="text-lg font-semibold text-gray-800">Flashcards</h1>
               <p className="text-sm text-gray-600">
-                Card {currentIndex + 1} of {currentSessionWords.length}
+                Card {currentIndex + 1} of {words.length}
+                {currentIndex > 0 && (
+                  <span className="text-xs text-blue-600 ml-2">(resumed from last position)</span>
+                )}
               </p>
+              <div className="flex items-center justify-center space-x-2 mt-1">
+                <button
+                  onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
+                  disabled={currentIndex === 0}
+                  className="text-xs px-2 py-1 bg-gray-100 rounded disabled:opacity-50"
+                >
+                  ← Prev
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  max={words.length}
+                  value={currentIndex + 1}
+                  onChange={(e) => {
+                    const newIndex = Math.max(0, Math.min(words.length - 1, parseInt(e.target.value) - 1))
+                    setCurrentIndex(newIndex)
+                  }}
+                  className="w-12 text-xs text-center border rounded"
+                />
+                <button
+                  onClick={() => setCurrentIndex(Math.min(words.length - 1, currentIndex + 1))}
+                  disabled={currentIndex === words.length - 1}
+                  className="text-xs px-2 py-1 bg-gray-100 rounded disabled:opacity-50"
+                >
+                  Next →
+                </button>
+                <button
+                  onClick={() => setCurrentIndex(0)}
+                  className="text-xs px-2 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200"
+                  title="Start from beginning"
+                >
+                  ↺ Start Over
+                </button>
+              </div>
             </div>
             
             <div className="text-right">
@@ -284,15 +370,7 @@ export function FlashcardsPage() {
             </button>
             
             <button
-              onClick={() => setShowHint(!showHint)}
-              className="flex items-center space-x-2 px-4 py-2 bg-white/60 hover:bg-white/80 rounded-xl transition-all duration-200"
-            >
-              {showHint ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              <span>{showHint ? 'Hide' : 'Show'} Hint</span>
-            </button>
-            
-            <button
-              onClick={resetCard}
+              onClick={() => setCurrentSide('front')}
               className="flex items-center space-x-2 px-4 py-2 bg-white/60 hover:bg-white/80 rounded-xl transition-all duration-200"
             >
               <RotateCcw className="w-4 h-4" />
@@ -300,36 +378,6 @@ export function FlashcardsPage() {
             </button>
           </div>
 
-          {/* Hint */}
-          {showHint && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-8 max-w-2xl w-full"
-            >
-              <div className="flex items-start space-x-2">
-                <Lightbulb className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium text-yellow-800 mb-2">Hint</h4>
-                  <p className="text-yellow-700 text-sm">
-                    {currentWord.pronunciation_guide && (
-                      <span className="block mb-1">
-                        <strong>Pronunciation:</strong> {currentWord.pronunciation_guide}
-                      </span>
-                    )}
-                    {currentWord.etymology && (
-                      <span className="block mb-1">
-                        <strong>Origin:</strong> {currentWord.etymology}
-                      </span>
-                    )}
-                    <span className="block">
-                      <strong>First letter:</strong> {currentWord.definition[0].toUpperCase()}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          )}
 
           {/* Difficulty Buttons (only show after seeing back) */}
           {currentSide === 'back' && (
@@ -344,14 +392,14 @@ export function FlashcardsPage() {
                 className="flex items-center space-x-2 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105"
               >
                 <X className="w-5 h-5" />
-                <span>Hard</span>
+                <span>Need Practice</span>
               </button>
               
               <button
                 onClick={() => handleDifficultyRating('good')}
                 className="flex items-center space-x-2 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105"
               >
-                <span>Good</span>
+                <span>Know It</span>
               </button>
               
               <button
@@ -359,7 +407,7 @@ export function FlashcardsPage() {
                 className="flex items-center space-x-2 px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105"
               >
                 <Check className="w-5 h-5" />
-                <span>Easy</span>
+                <span>Know It Well</span>
               </button>
             </motion.div>
           )}

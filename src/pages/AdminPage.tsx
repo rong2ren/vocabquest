@@ -181,7 +181,7 @@ export function AdminPage() {
 
     setGeneratingAI(true)
     try {
-      const { data, error } = await supabase.functions.invoke('ai-word-generator', {
+      const { data, error } = await supabase.functions.invoke('ai-word-generator-gemini', {
         body: {
           word: newWord.trim(),
           targetGrade: 4
@@ -434,7 +434,7 @@ export function AdminPage() {
           const cleanWord = word.trim()
           if (cleanWord) {
             // Generate AI content for each word
-            const { data: aiData } = await supabase.functions.invoke('ai-word-generator', {
+            const { data: aiData } = await supabase.functions.invoke('ai-word-generator-gemini', {
               body: { word: cleanWord, targetGrade: 4 }
             })
             

@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Volume2, VolumeX, Lightbulb, RotateCcw, CheckCircle, XCircle, Trophy, Target } from 'lucide-react'
+import { ArrowLeft, Volume2, VolumeX, Lightbulb, RotateCcw, CheckCircle, XCircle, Trophy, Target, ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useVocabularyStore } from '@/stores/vocabularyStore'
 import { useAuth } from '@/contexts/AuthContext'
 import { VocabularyWord } from '@/types'
+import { SpellingSessionManager, SpellingSessionData, SpellingWordAttempt, HintLevel } from '@/lib/spellingSession'
 import toast from 'react-hot-toast'
-
-type HintLevel = 0 | 1 | 2 | 3 | 4 | 5
 
 interface SpellingSessionStats {
   wordsAttempted: number
@@ -49,6 +48,13 @@ export function SpellingPage() {
   const [sessionComplete, setSessionComplete] = useState(false)
   const [initializationError, setInitializationError] = useState(false)
   
+  // Session persistence state
+  const [sessionId, setSessionId] = useState<string>('')
+  const [sessionWords, setSessionWords] = useState<VocabularyWord[]>([])
+  const [currentWordIndex, setCurrentWordIndex] = useState(0)
+  const [wordAttempts, setWordAttempts] = useState<SpellingWordAttempt[]>([])
+  const [isResuming, setIsResuming] = useState(false)
+  
   // Audio state
   const [isPlaying, setIsPlaying] = useState(false)
   const [audioEnabled, setAudioEnabled] = useState(true)
@@ -63,6 +69,14 @@ export function SpellingPage() {
           console.error('Spelling session initialization timeout')
           setInitializationError(true)
         }, 10000) // 10 second timeout
+        
+        // Check for existing session first
+        const existingSession = SpellingSessionManager.loadSession()
+        if (existingSession && existingSession.userId === user?.id) {
+          await resumeSpellingSession(existingSession)
+          clearTimeout(timeoutId)
+          return
+        }
         
         // Fetch vocabulary lists if not already loaded
         if (vocabularyLists.length === 0) {
@@ -91,7 +105,7 @@ export function SpellingPage() {
         const currentWords = useVocabularyStore.getState().words
         
         if (currentWords.length > 0) {
-          startSpellingSession()
+          startNewSpellingSession()
         } else {
           console.error('No words available for the selected list')
           setInitializationError(true)
@@ -105,16 +119,90 @@ export function SpellingPage() {
     }
     
     initializeSession()
-  }, [])
+  }, [user?.id])
   
   // Note: Removed automatic audio playback - browsers require user interaction
   
-  const startSpellingSession = () => {
+  // Save session state whenever it changes
+  useEffect(() => {
+    if (sessionActive && sessionId && sessionWords.length > 0) {
+      saveSessionState()
+    }
+  }, [sessionWords, currentWordIndex, wordAttempts, currentAnswer, hintLevel, sessionStats, sessionActive, sessionId])
+
+  const startNewSpellingSession = () => {
+    const newSessionId = SpellingSessionManager.createSessionId()
+    setSessionId(newSessionId)
+    
+    const currentWords = useVocabularyStore.getState().words
+    const sessionWordsList = currentWords.slice(0, 20) // Limit to 20 words
+    setSessionWords(sessionWordsList)
+    setCurrentWordIndex(0)
+    
+    // Initialize word attempts
+    const initialAttempts = sessionWordsList.map(word => SpellingSessionManager.createWordAttempt(word))
+    setWordAttempts(initialAttempts)
+    
     startLearningSession('spelling')
     setSessionActive(true)
     setSessionStartTime(Date.now())
     setWordStartTime(Date.now())
     resetWordState()
+  }
+
+  const resumeSpellingSession = async (sessionData: SpellingSessionData) => {
+    setIsResuming(true)
+    
+    try {
+      setSessionId(sessionData.sessionId)
+      setSessionWords(sessionData.sessionWords)
+      setCurrentWordIndex(sessionData.currentWordIndex)
+      setWordAttempts(sessionData.wordAttempts)
+      setCurrentAnswer(sessionData.currentAnswer)
+      setHintLevel(sessionData.currentHintLevel)
+      setSessionStats(sessionData.sessionStats)
+      setSessionStartTime(sessionData.sessionStartTime)
+      setWordStartTime(sessionData.wordStartTime)
+      setAudioEnabled(sessionData.audioEnabled)
+      setSessionActive(true)
+      
+      // Set current word in store
+      const currentWord = sessionData.sessionWords[sessionData.currentWordIndex]
+      if (currentWord) {
+        useVocabularyStore.getState().setCurrentWord(currentWord)
+      }
+      
+      setWordStartTime(Date.now())
+      setIsResuming(false)
+      
+      toast.success(`Resumed spelling session (${sessionData.currentWordIndex + 1}/${sessionData.sessionWords.length} words)`)
+    } catch (error) {
+      console.error('Error resuming spelling session:', error)
+      setIsResuming(false)
+      setInitializationError(true)
+    }
+  }
+
+  const saveSessionState = () => {
+    if (!user?.id || !sessionId || sessionWords.length === 0) return
+    
+    const sessionData: SpellingSessionData = {
+      sessionId,
+      userId: user.id,
+      currentWordIndex,
+      sessionWords,
+      wordAttempts,
+      currentAnswer,
+      currentHintLevel: hintLevel,
+      sessionStats,
+      sessionStartTime,
+      wordStartTime,
+      audioEnabled,
+      createdAt: sessionStartTime,
+      lastUpdated: Date.now()
+    }
+    
+    SpellingSessionManager.saveSession(sessionData)
   }
   
   const resetWordState = () => {
@@ -203,6 +291,19 @@ export function SpellingPage() {
     setIsCorrect(correct)
     setShowFeedback(true)
     
+    // Update word attempt
+    const currentWordAttempt = wordAttempts[currentWordIndex]
+    const updatedAttempt = SpellingSessionManager.addWordAttempt(
+      currentWordAttempt,
+      currentAnswer,
+      hintLevel,
+      correct
+    )
+    
+    const updatedAttempts = [...wordAttempts]
+    updatedAttempts[currentWordIndex] = updatedAttempt
+    setWordAttempts(updatedAttempts)
+    
     // Calculate points based on hints used and correctness
     let points = 0
     if (correct) {
@@ -244,8 +345,10 @@ export function SpellingPage() {
   }
   
   const handleNextWord = () => {
-    const nextWord = getNextWord()
-    if (nextWord) {
+    if (currentWordIndex < sessionWords.length - 1) {
+      setCurrentWordIndex(prev => prev + 1)
+      const nextWord = sessionWords[currentWordIndex + 1]
+      useVocabularyStore.getState().setCurrentWord(nextWord)
       resetWordState()
     } else {
       // Session complete
@@ -256,6 +359,27 @@ export function SpellingPage() {
         ...prev,
         totalTime
       }))
+      SpellingSessionManager.clearSession()
+    }
+  }
+
+  const handlePreviousWord = () => {
+    if (currentWordIndex > 0) {
+      setCurrentWordIndex(prev => prev - 1)
+      const prevWord = sessionWords[currentWordIndex - 1]
+      useVocabularyStore.getState().setCurrentWord(prevWord)
+      
+      // Restore state for previous word if it was attempted
+      const wordAttempt = wordAttempts[currentWordIndex - 1]
+      if (wordAttempt && wordAttempt.attempts.length > 0) {
+        const lastAttempt = wordAttempt.attempts[wordAttempt.attempts.length - 1]
+        setCurrentAnswer(lastAttempt.answer)
+        setHintLevel(lastAttempt.hintLevel)
+        setIsCorrect(lastAttempt.isCorrect)
+        setShowFeedback(true)
+      } else {
+        resetWordState()
+      }
     }
   }
   
@@ -270,7 +394,15 @@ export function SpellingPage() {
     }
   }
   
+  const handleAbandonSession = () => {
+    if (confirm('Are you sure you want to abandon this spelling session? Your progress will be saved.')) {
+      SpellingSessionManager.clearSession()
+      navigate('/dashboard')
+    }
+  }
+
   const restartSession = () => {
+    SpellingSessionManager.clearSession()
     setSessionComplete(false)
     setSessionStats({
       wordsAttempted: 0,
@@ -279,7 +411,7 @@ export function SpellingPage() {
       totalTime: 0,
       pointsEarned: 0
     })
-    startSpellingSession()
+    startNewSpellingSession()
   }
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,6 +428,22 @@ export function SpellingPage() {
     }
   }
   
+  if (isResuming) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-teal-50">
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-center max-w-md mx-auto px-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">Resuming Session...</h2>
+            <p className="text-gray-600">
+              Loading your previous spelling session
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (sessionComplete) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-teal-50">
@@ -400,13 +548,21 @@ export function SpellingPage() {
       <header className="bg-white/80 backdrop-blur-sm border-b border-white/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Dashboard</span>
-            </button>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>Dashboard</span>
+              </button>
+              <button
+                onClick={handleAbandonSession}
+                className="text-red-600 hover:text-red-800 transition-colors text-sm"
+              >
+                Abandon Session
+              </button>
+            </div>
             
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -432,6 +588,28 @@ export function SpellingPage() {
           </div>
         </div>
       </header>
+
+      {/* Progress Bar */}
+      <div className="bg-white/60 border-b border-white/20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-600">
+                Word {currentWordIndex + 1} of {sessionWords.length}
+              </span>
+              {wordAttempts[currentWordIndex]?.completed && (
+                <span className="text-green-600 text-sm">✓ Completed</span>
+              )}
+            </div>
+            <div className="w-full max-w-xs bg-gray-200 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-green-500 to-teal-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${((currentWordIndex + 1) / sessionWords.length) * 100}%` }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -566,20 +744,33 @@ export function SpellingPage() {
           </div>
         </motion.div>
         
-        {/* Progress Bar */}
-        <div className="mt-6 bg-white rounded-lg p-4 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-700">Session Progress</span>
-            <span className="text-sm text-gray-500">{sessionStats.wordsAttempted} words attempted</span>
+
+        {/* Navigation Controls */}
+        <div className="flex items-center justify-between mt-8">
+          <button
+            onClick={handlePreviousWord}
+            disabled={currentWordIndex === 0}
+            className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            <span>Previous</span>
+          </button>
+
+          <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <span>Word {currentWordIndex + 1} of {sessionWords.length}</span>
+            {wordAttempts[currentWordIndex]?.completed && (
+              <span className="text-green-600">✓ Completed</span>
+            )}
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-gradient-to-r from-green-600 to-teal-600 h-2 rounded-full transition-all duration-300"
-              style={{ 
-                width: `${sessionStats.wordsAttempted > 0 ? (sessionStats.wordsCorrect / sessionStats.wordsAttempted) * 100 : 0}%` 
-              }}
-            />
-          </div>
+
+          <button
+            onClick={handleNextWord}
+            disabled={currentWordIndex >= sessionWords.length - 1}
+            className="flex items-center space-x-2 px-4 py-2 bg-green-100 hover:bg-green-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+          >
+            <span>Next</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>

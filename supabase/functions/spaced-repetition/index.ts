@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
         let consecutiveCorrect = 0;
         let totalAttempts = 1;
         let totalCorrect = is_correct ? 1 : 0;
-        let firstLearned = null;
+        let firstLearned: string | null = null;
 
         if (currentProgress) {
             // Existing progress - update
@@ -112,8 +112,17 @@ Deno.serve(async (req) => {
         // Calculate next review time
         newNextReview = new Date(now.getTime() + (newInterval * 60 * 60 * 1000)); // Convert hours to milliseconds
 
-        // Determine if word is "learned" (level 4+ with good success rate)
-        const isLearned = newLevel >= 4 && successRate >= 80;
+        // Determine if word is "learned" (level 2+ with good success rate, or first correct attempt)
+        const isLearned = (newLevel >= 2 && successRate >= 80) || (newLevel === 1 && is_correct);
+        
+        console.log('Learning calculation:', {
+            word_id,
+            is_correct,
+            newLevel,
+            successRate,
+            isLearned,
+            hadPreviousProgress: !!currentProgress
+        });
 
         const progressUpdate = {
             user_id,
@@ -216,6 +225,49 @@ Deno.serve(async (req) => {
             },
             body: JSON.stringify(activityData)
         });
+
+        // Update user gamification data
+        if (pointsEarned > 0) {
+            // Get current gamification data
+            const gamificationResponse = await fetch(`${supabaseUrl}/rest/v1/user_gamification?user_id=eq.${user_id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${serviceRoleKey}`,
+                    'apikey': serviceRoleKey,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (gamificationResponse.ok) {
+                const gamificationData = await gamificationResponse.json();
+                const currentGamification = gamificationData[0];
+
+                if (currentGamification) {
+                    // Update gamification data
+                    const updatedGamification = {
+                        total_points: currentGamification.total_points + pointsEarned,
+                        current_xp: currentGamification.current_xp + pointsEarned,
+                        words_learned: isLearned && !currentProgress?.is_learned 
+                            ? currentGamification.words_learned + 1 
+                            : currentGamification.words_learned,
+                        updated_at: new Date().toISOString()
+                    };
+
+                    // Update the gamification record
+                    await fetch(`${supabaseUrl}/rest/v1/user_gamification?user_id=eq.${user_id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${serviceRoleKey}`,
+                            'apikey': serviceRoleKey,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedGamification)
+                    });
+
+                    console.log('Gamification data updated:', updatedGamification);
+                }
+            }
+        }
 
         console.log('Spaced repetition update completed successfully');
 

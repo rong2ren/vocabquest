@@ -11,10 +11,13 @@ import {
   Clock,
   Brain,
   Play,
-  CheckCircle
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { VocabularyWord, QuizType } from '@/types'
+import { QuizSessionManager, QuizSessionData } from '@/lib/quizSession'
 import toast from 'react-hot-toast'
 
 interface QuizQuestion {
@@ -47,20 +50,37 @@ export function QuizPage() {
   const [selectedAnswer, setSelectedAnswer] = useState<string>('')
   const [showResult, setShowResult] = useState(false)
   const [sessionStarted, setSessionStarted] = useState(false)
+  const [sessionId, setSessionId] = useState<string>('')
   const [sessionStats, setSessionStats] = useState({
     correct: 0,
     total: 0,
     startTime: Date.now()
   })
   const [questionStartTime, setQuestionStartTime] = useState(Date.now())
+  const [isResuming, setIsResuming] = useState(false)
 
   useEffect(() => {
     if (!sessionStarted && words.length > 0) {
-      startSession()
+      // Check for existing session first
+      const existingSession = QuizSessionManager.loadSession()
+      if (existingSession && existingSession.userId === user?.id) {
+        resumeSession(existingSession)
+      } else {
+        startNewSession()
+      }
     }
-  }, [words, sessionStarted])
+  }, [words, sessionStarted, user?.id])
 
-  const startSession = () => {
+  // Save session state whenever it changes
+  useEffect(() => {
+    if (sessionStarted && sessionId && questions.length > 0) {
+      saveSessionState()
+    }
+  }, [questions, currentQuestionIndex, sessionStats, sessionStarted, sessionId])
+
+  const startNewSession = () => {
+    const newSessionId = QuizSessionManager.createSessionId()
+    setSessionId(newSessionId)
     startLearningSession('quiz')
     generateQuestions()
     setSessionStarted(true)
@@ -70,6 +90,42 @@ export function QuizPage() {
       startTime: Date.now()
     })
     setQuestionStartTime(Date.now())
+  }
+
+  const resumeSession = (sessionData: QuizSessionData) => {
+    setIsResuming(true)
+    setSessionId(sessionData.sessionId)
+    setQuestions(sessionData.questions)
+    setCurrentQuestionIndex(sessionData.currentQuestionIndex)
+    setSessionStats(sessionData.sessionStats)
+    setSessionStarted(true)
+    
+    // Set selected answer for current question if already answered
+    const currentQuestion = sessionData.questions[sessionData.currentQuestionIndex]
+    if (currentQuestion?.userAnswer) {
+      setSelectedAnswer(currentQuestion.userAnswer)
+    }
+    
+    setQuestionStartTime(Date.now())
+    setIsResuming(false)
+    
+    toast.success(`Resumed quiz session (${sessionData.currentQuestionIndex + 1}/${sessionData.questions.length} questions)`)
+  }
+
+  const saveSessionState = () => {
+    if (!user?.id || !sessionId) return
+    
+    const sessionData: QuizSessionData = {
+      sessionId,
+      userId: user.id,
+      questions,
+      currentQuestionIndex,
+      sessionStats,
+      createdAt: sessionStats.startTime,
+      lastUpdated: Date.now()
+    }
+    
+    QuizSessionManager.saveSession(sessionData)
   }
 
   const generateQuestions = () => {
@@ -156,9 +212,11 @@ export function QuizPage() {
 
     setShowResult(true)
 
-    // Auto advance after 2 seconds
+    // Auto advance after 2 seconds (only if not manually navigating)
     setTimeout(() => {
-      handleNextQuestion()
+      if (currentQuestionIndex < questions.length - 1) {
+        handleNextQuestion()
+      }
     }, 2000)
   }
 
@@ -169,10 +227,40 @@ export function QuizPage() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1)
       setQuestionStartTime(Date.now())
+      
+      // Set selected answer for next question if already answered
+      const nextQuestion = questions[currentQuestionIndex + 1]
+      if (nextQuestion?.userAnswer) {
+        setSelectedAnswer(nextQuestion.userAnswer)
+      }
     } else {
       // Quiz complete
       const accuracy = Math.round((sessionStats.correct / sessionStats.total) * 100)
       toast.success(`Quiz complete! Accuracy: ${accuracy}%`)
+      QuizSessionManager.clearSession()
+      navigate('/dashboard')
+    }
+  }
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setShowResult(false)
+      setCurrentQuestionIndex(prev => prev - 1)
+      setQuestionStartTime(Date.now())
+      
+      // Set selected answer for previous question if already answered
+      const prevQuestion = questions[currentQuestionIndex - 1]
+      if (prevQuestion?.userAnswer) {
+        setSelectedAnswer(prevQuestion.userAnswer)
+      } else {
+        setSelectedAnswer('')
+      }
+    }
+  }
+
+  const handleAbandonQuiz = () => {
+    if (confirm('Are you sure you want to abandon this quiz? Your progress will be saved.')) {
+      QuizSessionManager.clearSession()
       navigate('/dashboard')
     }
   }
@@ -186,6 +274,20 @@ export function QuizPage() {
     }
   }
 
+  if (isResuming) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <LoadingSpinner />
+          <h2 className="text-2xl font-bold text-gray-800 mb-4 mt-4">Resuming Quiz...</h2>
+          <p className="text-gray-600">
+            Loading your previous quiz session
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   if (!sessionStarted || questions.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center">
@@ -196,7 +298,7 @@ export function QuizPage() {
             Test your knowledge with multiple choice and fill-in-the-blank questions!
           </p>
           <button
-            onClick={startSession}
+            onClick={startNewSession}
             className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-medium hover:from-purple-700 hover:to-pink-700 transition-all duration-200 flex items-center space-x-2 mx-auto"
           >
             <Play className="w-5 h-5" />
@@ -216,13 +318,21 @@ export function QuizPage() {
       <header className="bg-white/80 backdrop-blur-sm border-b border-white/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Dashboard</span>
-            </button>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>Back to Dashboard</span>
+              </button>
+              <button
+                onClick={handleAbandonQuiz}
+                className="text-red-600 hover:text-red-800 transition-colors text-sm"
+              >
+                Abandon Quiz
+              </button>
+            </div>
             
             <div className="text-center">
               <h1 className="text-lg font-semibold text-gray-800">Quiz Mode</h1>
@@ -410,6 +520,34 @@ export function QuizPage() {
                 )}
               </motion.div>
             )}
+
+            {/* Navigation Controls */}
+            <div className="flex items-center justify-between mt-8">
+              <button
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+                className="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Previous</span>
+              </button>
+
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
+                {currentQuestion?.userAnswer && (
+                  <span className="text-green-600">✓ Answered</span>
+                )}
+              </div>
+
+              <button
+                onClick={handleNextQuestion}
+                disabled={currentQuestionIndex >= questions.length - 1}
+                className="flex items-center space-x-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+              >
+                <span>Next</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>

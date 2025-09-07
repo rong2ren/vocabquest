@@ -3,7 +3,7 @@ export interface User {
   id: string
   email: string
   full_name: string
-  role: 'student' | 'teacher' | 'parent' | 'admin'
+  role: 'student' | 'admin'
   grade_level?: number
   date_of_birth?: string
   parent_email?: string
@@ -172,6 +172,17 @@ export interface DailyGoal {
 export type LearningMode = 'flashcards' | 'quiz' | 'spelling' | 'review'
 export type QuizType = 'multiple_choice' | 'fill_blank' | 'matching'
 
+export interface QuizQuestion {
+  id: string
+  word_id: string
+  question_type: QuizType
+  question_text: string
+  options?: string[]
+  correct_answer: string
+  explanation?: string
+  difficulty_level: number
+}
+
 // API Response Types
 export interface ApiResponse<T> {
   data?: T
@@ -191,7 +202,7 @@ export interface SpacedRepetitionUpdate {
 
 export interface UserProfileData {
   full_name?: string
-  role?: 'student' | 'teacher' | 'parent' | 'admin'
+  role?: 'student' | 'admin'
   grade_level?: number
   date_of_birth?: string
   parent_email?: string

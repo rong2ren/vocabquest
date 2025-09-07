@@ -12,7 +12,6 @@ import {
   Target, 
   Flame, 
   Star,
-  Clock,
   TrendingUp,
   User,
   LogOut,
@@ -83,13 +82,6 @@ export function DashboardPage() {
     }
   ]
 
-  const calculateProgress = () => {
-    if (!dailyGoal) return 0
-    const wordProgress = (dailyGoal.words_completed / dailyGoal.target_words) * 100
-    const timeProgress = (dailyGoal.minutes_completed / dailyGoal.target_minutes) * 100
-    const accuracyProgress = dailyGoal.current_accuracy >= dailyGoal.target_accuracy ? 100 : 0
-    return Math.min(100, Math.round((wordProgress + timeProgress + accuracyProgress) / 3))
-  }
 
   if (loading && !vocabularyLists.length) {
     return (
@@ -175,55 +167,6 @@ export function DashboardPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Daily Progress */}
-            <motion.div 
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.6 }}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-gray-800">Today's Goal</h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
-                  <Clock className="w-4 h-4" />
-                  <span>{dailyGoal?.minutes_completed || 0}/{dailyGoal?.target_minutes || 20} min</span>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Overall Progress</span>
-                  <span className="text-sm font-bold text-blue-600">{calculateProgress()}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div 
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${calculateProgress()}%` }}
-                  />
-                </div>
-                
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <p className="text-2xl font-bold text-blue-600">
-                      {dailyGoal?.words_completed || 0}
-                    </p>
-                    <p className="text-xs text-gray-600">Words Learned</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-green-600">
-                      {dailyGoal?.current_accuracy || 0}%
-                    </p>
-                    <p className="text-xs text-gray-600">Accuracy</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-orange-600">
-                      {gamification?.current_streak || 0}
-                    </p>
-                    <p className="text-xs text-gray-600">Day Streak</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
 
             {/* Learning Modes */}
             <motion.div
@@ -239,7 +182,7 @@ export function DashboardPage() {
                     <motion.button
                       key={mode.id}
                       onClick={() => startLearningMode(mode.id as any)}
-                      className={`bg-gradient-to-r ${mode.color} ${mode.hoverColor} text-white rounded-2xl p-6 text-left transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl`}
+                      className={`bg-gradient-to-r ${mode.color} ${mode.hoverColor} text-white rounded-2xl p-6 text-left transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl h-24 flex items-center`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 + index * 0.1, duration: 0.6 }}
@@ -269,7 +212,7 @@ export function DashboardPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Your Stats</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">🏆 My Achievements</h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -342,42 +285,6 @@ export function DashboardPage() {
               )}
             </motion.div>
 
-            {/* Quick Actions */}
-            <motion.div 
-              className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-            >
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Start</h3>
-              <div className="space-y-2">
-                <button 
-                  onClick={() => startLearningMode('review')}
-                  className="w-full text-left p-3 rounded-xl hover:bg-blue-50 transition-colors border border-blue-100"
-                >
-                  <div className="flex items-center space-x-3">
-                    <RotateCcw className="w-5 h-5 text-blue-600" />
-                    <div>
-                      <p className="font-medium text-gray-800">Smart Review</p>
-                      <p className="text-xs text-gray-600">Review words due today</p>
-                    </div>
-                  </div>
-                </button>
-                
-                <button 
-                  onClick={() => startLearningMode('quiz')}
-                  className="w-full text-left p-3 rounded-xl hover:bg-purple-50 transition-colors border border-purple-100"
-                >
-                  <div className="flex items-center space-x-3">
-                    <Brain className="w-5 h-5 text-purple-600" />
-                    <div>
-                      <p className="font-medium text-gray-800">Quick Quiz</p>
-                      <p className="text-xs text-gray-600">Test your knowledge</p>
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </motion.div>
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ export function ProfilePage() {
   const [formData, setFormData] = useState({
     full_name: '',
     grade_level: 4,
-    role: 'student' as 'student' | 'teacher' | 'parent' | 'admin'
+    role: 'student' as 'student' | 'admin'
   })
   const [saving, setSaving] = useState(false)
 
@@ -123,21 +123,6 @@ export function ProfilePage() {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-                Role
-              </label>
-              <select
-                id="role"
-                value={formData.role}
-                onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as any }))}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/70"
-              >
-                <option value="student">Student</option>
-                <option value="teacher">Teacher</option>
-                <option value="parent">Parent</option>
-              </select>
-            </div>
 
             <button
               type="submit"
