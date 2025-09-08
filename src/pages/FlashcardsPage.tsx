@@ -280,7 +280,7 @@ export function FlashcardsPage() {
             transition={{ duration: 0.5 }}
           >
             <div 
-              className="relative h-80 cursor-pointer"
+              className="relative h-96 cursor-pointer"
               onClick={flipCard}
             >
               <AnimatePresence mode="wait">
@@ -291,11 +291,11 @@ export function FlashcardsPage() {
                     animate={{ rotateY: 0, opacity: 1 }}
                     exit={{ rotateY: -90, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl shadow-2xl flex flex-col items-center justify-center text-white"
+                    className="absolute inset-0 bg-white border-2 border-gray-200 rounded-2xl shadow-lg flex flex-col items-center justify-center"
                   >
                     <div className="text-center px-8">
-                      <h2 className="text-4xl font-bold mb-4">{currentWord.word}</h2>
-                      <p className="text-blue-100 text-lg capitalize mb-6">
+                      <h2 className="text-5xl font-light text-gray-800 mb-2">{currentWord.word}</h2>
+                      <p className="text-gray-500 text-lg capitalize mb-8">
                         {currentWord.part_of_speech}
                       </p>
                       
@@ -306,15 +306,15 @@ export function FlashcardsPage() {
                             e.stopPropagation()
                             playAudio()
                           }}
-                          className="bg-white/20 hover:bg-white/30 p-4 rounded-full transition-all duration-200 transform hover:scale-110"
+                          className="bg-gray-100 hover:bg-gray-200 p-3 rounded-full transition-all duration-200"
                         >
-                          <Volume2 className="w-6 h-6" />
+                          <Volume2 className="w-5 h-5 text-gray-600" />
                         </button>
                       )}
                     </div>
                     
-                    <div className="absolute bottom-4 text-center">
-                      <p className="text-blue-100 text-sm">Click to see definition</p>
+                    <div className="absolute bottom-6 text-center">
+                      <p className="text-gray-400 text-sm">Tap to reveal</p>
                     </div>
                   </motion.div>
                 ) : (
@@ -324,34 +324,44 @@ export function FlashcardsPage() {
                     animate={{ rotateY: 0, opacity: 1 }}
                     exit={{ rotateY: -90, opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-gradient-to-br from-green-500 to-teal-600 rounded-3xl shadow-2xl flex flex-col items-center justify-center text-white p-8"
+                    className="absolute inset-0 bg-white border-2 border-gray-200 rounded-2xl shadow-lg flex flex-col items-center justify-center p-8"
                   >
-                    <div className="text-center">
-                      <h3 className="text-2xl font-bold mb-4">{currentWord.word}</h3>
-                      <p className="text-green-100 text-lg mb-6 leading-relaxed">
+                    <div className="text-center w-full">
+                      <h3 className="text-2xl font-medium text-gray-800 mb-4">{currentWord.word}</h3>
+                      <p className="text-gray-700 text-lg mb-4 leading-relaxed">
                         {currentWord.simple_definition || currentWord.definition}
                       </p>
                       
-                      <div className="bg-white/20 rounded-xl p-4 mb-4">
-                        <p className="text-green-50 italic">
+                      <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p className="text-gray-600 italic">
                           "{currentWord.example_sentence}"
                         </p>
                       </div>
                       
-                      {/* Synonyms */}
-                      {currentWord.synonyms.length > 0 && (
-                        <div className="mb-4">
-                          <p className="text-green-100 text-sm mb-2">Similar words:</p>
-                          <p className="text-white font-medium">
-                            {currentWord.synonyms.slice(0, 3).join(', ')}
-                          </p>
-                        </div>
-                      )}
+                      {/* Synonyms and Antonyms */}
+                      <div className="space-y-4">
+                        {/* Synonyms */}
+                        {currentWord.synonyms && currentWord.synonyms.length > 0 && (
+                          <div className="bg-blue-50 rounded-lg p-3">
+                            <p className="text-blue-700 text-sm mb-1 font-medium">Similar words:</p>
+                            <p className="text-blue-800">
+                              {currentWord.synonyms.slice(0, 3).join(', ')}
+                            </p>
+                          </div>
+                        )}
+                        
+                        {/* Antonyms */}
+                        {currentWord.antonyms && currentWord.antonyms.length > 0 && (
+                          <div className="bg-red-50 rounded-lg p-3">
+                            <p className="text-red-700 text-sm mb-1 font-medium">Opposite words:</p>
+                            <p className="text-red-800">
+                              {currentWord.antonyms.slice(0, 3).join(', ')}
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    
-                    <div className="absolute bottom-4 text-center">
-                      <p className="text-green-100 text-sm">Click to see word again</p>
-                    </div>
+                  
                   </motion.div>
                 )}
               </AnimatePresence>

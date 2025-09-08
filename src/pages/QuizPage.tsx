@@ -18,17 +18,17 @@ import {
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { VocabularyWord, QuizType } from '@/types'
 import { QuizSessionManager, QuizSessionData } from '@/lib/quizSession'
+import { QuizQuestion as DatabaseQuizQuestion } from '@/types'
 import toast from 'react-hot-toast'
 
-interface QuizQuestion {
-  id: string
-  word: VocabularyWord
-  type: QuizType
+// Local QuizQuestion interface for UI with both database and UI properties
+interface QuizQuestion extends DatabaseQuizQuestion {
+  type: string
   question: string
-  options?: string[]
   correctAnswer: string
   userAnswer?: string
   isCorrect?: boolean
+  word?: any // VocabularyWord
 }
 
 export function QuizPage() {
@@ -44,6 +44,7 @@ export function QuizPage() {
     words,
     getRandomWords
   } = useVocabularyStore()
+
 
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -93,15 +94,26 @@ export function QuizPage() {
   }
 
   const resumeSession = (sessionData: QuizSessionData) => {
+    // Map the session data to match the expected format
+    const mappedQuestions: QuizQuestion[] = sessionData.questions.map(q => ({
+      ...q,
+      type: q.question_type,
+      question: q.question_text,
+      correctAnswer: q.correct_answer,
+      userAnswer: (q as any).userAnswer,
+      isCorrect: (q as any).isCorrect,
+      word: (q as any).word
+    }))
+    
     setIsResuming(true)
     setSessionId(sessionData.sessionId)
-    setQuestions(sessionData.questions)
+    setQuestions(mappedQuestions)
     setCurrentQuestionIndex(sessionData.currentQuestionIndex)
     setSessionStats(sessionData.sessionStats)
     setSessionStarted(true)
     
     // Set selected answer for current question if already answered
-    const currentQuestion = sessionData.questions[sessionData.currentQuestionIndex]
+    const currentQuestion = mappedQuestions[sessionData.currentQuestionIndex]
     if (currentQuestion?.userAnswer) {
       setSelectedAnswer(currentQuestion.userAnswer)
     }
@@ -129,8 +141,16 @@ export function QuizPage() {
   }
 
   const generateQuestions = () => {
-    const sessionWords = currentSessionWords.slice(0, 15) // Limit to 15 questions
+    // Use currentSessionWords if available, otherwise fall back to words array
+    const availableWords = currentSessionWords.length > 0 ? currentSessionWords : words
+    const sessionWords = availableWords.slice(0, 15) // Limit to 15 questions
     const quizQuestions: QuizQuestion[] = []
+
+
+    if (sessionWords.length === 0) {
+      toast.error('No vocabulary words available. Please try again.')
+      return
+    }
 
     sessionWords.forEach((word, index) => {
       const questionTypes: QuizType[] = ['multiple_choice', 'fill_blank']
@@ -161,11 +181,18 @@ export function QuizPage() {
     const shuffledOptions = allOptions.sort(() => Math.random() - 0.5)
 
     return {
+      // Database properties
       id: word.id,
+      word_id: word.id,
+      question_type: 'multiple_choice' as QuizType,
+      question_text: `What does "${word.word}" mean?`,
+      options: shuffledOptions,
+      correct_answer: word.definition,
+      difficulty_level: 1,
+      // UI properties
       word,
       type: 'multiple_choice',
       question: `What does "${word.word}" mean?`,
-      options: shuffledOptions,
       correctAnswer: word.definition
     }
   }
@@ -176,7 +203,14 @@ export function QuizPage() {
     const questionSentence = sentence.replace(wordRegex, '______')
 
     return {
+      // Database properties
       id: word.id,
+      word_id: word.id,
+      question_type: 'fill_blank' as QuizType,
+      question_text: `Fill in the blank: ${questionSentence}`,
+      correct_answer: word.word,
+      difficulty_level: 1,
+      // UI properties
       word,
       type: 'fill_blank',
       question: `Fill in the blank: ${questionSentence}`,
@@ -312,6 +346,18 @@ export function QuizPage() {
   const currentQuestion = questions[currentQuestionIndex]
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100
 
+  // Safety check - if no current question, show loading
+  if (!currentQuestion) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50 flex items-center justify-center">
+        <div className="text-center">
+          <LoadingSpinner size="lg" />
+          <p className="mt-4 text-gray-600">Loading question...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
       {/* Header */}
@@ -380,11 +426,11 @@ export function QuizPage() {
                 <div className="flex items-center space-x-2">
                   <Brain className="w-6 h-6 text-purple-600" />
                   <span className="text-purple-600 font-medium capitalize">
-                    {currentQuestion.type.replace('_', ' ')}
+                    {currentQuestion.type?.replace('_', ' ') || 'Question'}
                   </span>
                 </div>
                 
-                {currentQuestion.word.audio_url && (
+                {currentQuestion.word?.audio_url && (
                   <button
                     onClick={() => playAudio(currentQuestion.word)}
                     className="flex items-center space-x-2 px-3 py-2 bg-purple-100 hover:bg-purple-200 rounded-lg transition-colors"
@@ -396,7 +442,7 @@ export function QuizPage() {
               </div>
               
               <h2 className="text-xl font-semibold text-gray-800 mb-6">
-                {currentQuestion.question}
+                {currentQuestion.question || 'Loading question...'}
               </h2>
               
               {/* Question Type Specific Content */}

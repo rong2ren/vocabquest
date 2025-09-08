@@ -21,7 +21,7 @@ import { LoadingSpinner } from '@/components/LoadingSpinner'
 import toast from 'react-hot-toast'
 
 export function DashboardPage() {
-  const { user, profile, gamification, dailyGoal, signOut } = useAuth()
+  const { user, profile, gamification, signOut } = useAuth()
   const { 
     fetchVocabularyLists, 
     fetchUserProgress,

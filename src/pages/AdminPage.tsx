@@ -82,6 +82,105 @@ export function AdminPage() {
   const [showBulkImportModal, setShowBulkImportModal] = useState(false)
   const [bulkImportText, setBulkImportText] = useState('')
   const [bulkImportFormat, setBulkImportFormat] = useState('simple') // 'simple' or 'csv'
+  
+  // Tense checking function
+  const checkTenseMismatch = (word: VocabularyWord) => {
+    console.log(`🔍 Checking word: "${word.word}" (${word.part_of_speech})`)
+    console.log(`📝 Example sentence: "${word.example_sentence}"`)
+    
+    if (!word.example_sentence || word.part_of_speech !== 'verb') {
+      console.log(`⏭️ Skipping - not a verb or no example sentence`)
+      return null
+    }
+    
+    // Use word boundary regex to check for exact word match
+    const wordRegex = new RegExp(`\\b${word.word.toLowerCase()}\\b`, 'g')
+    const wordInSentence = wordRegex.test(word.example_sentence.toLowerCase())
+    console.log(`🔎 Word "${word.word}" in sentence (exact match): ${wordInSentence}`)
+    
+    if (wordInSentence) {
+      console.log(`✅ Word found correctly`)
+      return null // Word is found correctly
+    }
+    
+    // Check for common tense variations
+    const tenseVariations = getTenseVariations(word.word)
+    console.log(`🔄 Checking variations:`, tenseVariations)
+    
+    const foundVariation = tenseVariations.find(variation => 
+      word.example_sentence.toLowerCase().includes(variation.toLowerCase())
+    )
+    
+    console.log(`🎯 Found variation:`, foundVariation)
+    
+    return foundVariation || 'not_found'
+  }
+  
+  const getTenseVariations = (word: string): string[] => {
+    const variations = []
+    const lowerWord = word.toLowerCase()
+    
+    // Common verb tense variations
+    if (lowerWord.endsWith('e')) {
+      variations.push(lowerWord + 'd', lowerWord + 's', lowerWord + 'ing')
+    } else if (lowerWord.endsWith('y')) {
+      variations.push(lowerWord.slice(0, -1) + 'ied', lowerWord + 's', lowerWord + 'ing')
+    } else if (lowerWord.match(/[bcdfghjklmnpqrstvwxyz]$/)) {
+      variations.push(lowerWord + 'ed', lowerWord + 's', lowerWord + 'ing')
+    }
+    
+    // Irregular verbs (common ones)
+    const irregularVerbs: { [key: string]: string[] } = {
+      'go': ['went', 'goes', 'going'], 'come': ['came', 'comes', 'coming'],
+      'see': ['saw', 'sees', 'seeing'], 'take': ['took', 'takes', 'taking'],
+      'make': ['made', 'makes', 'making'], 'get': ['got', 'gets', 'getting'],
+      'give': ['gave', 'gives', 'giving'], 'find': ['found', 'finds', 'finding'],
+      'think': ['thought', 'thinks', 'thinking'], 'know': ['knew', 'knows', 'knowing'],
+      'look': ['looked', 'looks', 'looking'], 'use': ['used', 'uses', 'using'],
+      'work': ['worked', 'works', 'working'], 'call': ['called', 'calls', 'calling'],
+      'try': ['tried', 'tries', 'trying'], 'ask': ['asked', 'asks', 'asking'],
+      'need': ['needed', 'needs', 'needing'], 'feel': ['felt', 'feels', 'feeling'],
+      'become': ['became', 'becomes', 'becoming'], 'leave': ['left', 'leaves', 'leaving'],
+      'put': ['put', 'puts', 'putting'], 'mean': ['meant', 'means', 'meaning'],
+      'keep': ['kept', 'keeps', 'keeping'], 'let': ['let', 'lets', 'letting'],
+      'begin': ['began', 'begins', 'beginning'], 'seem': ['seemed', 'seems', 'seeming'],
+      'help': ['helped', 'helps', 'helping'], 'show': ['showed', 'shows', 'showing'],
+      'hear': ['heard', 'hears', 'hearing'], 'play': ['played', 'plays', 'playing'],
+      'run': ['ran', 'runs', 'running'], 'move': ['moved', 'moves', 'moving'],
+      'live': ['lived', 'lives', 'living'], 'believe': ['believed', 'believes', 'believing'],
+      'hold': ['held', 'holds', 'holding'], 'bring': ['brought', 'brings', 'bringing'],
+      'happen': ['happened', 'happens', 'happening'], 'write': ['wrote', 'writes', 'writing'],
+      'provide': ['provided', 'provides', 'providing'], 'sit': ['sat', 'sits', 'sitting'],
+      'stand': ['stood', 'stands', 'standing'], 'lose': ['lost', 'loses', 'losing'],
+      'pay': ['paid', 'pays', 'paying'], 'meet': ['met', 'meets', 'meeting'],
+      'include': ['included', 'includes', 'including'], 'continue': ['continued', 'continues', 'continuing'],
+      'set': ['set', 'sets', 'setting'], 'learn': ['learned', 'learns', 'learning'],
+      'change': ['changed', 'changes', 'changing'], 'lead': ['led', 'leads', 'leading'],
+      'understand': ['understood', 'understands', 'understanding'], 'watch': ['watched', 'watches', 'watching'],
+      'follow': ['followed', 'follows', 'following'], 'stop': ['stopped', 'stops', 'stopping'],
+      'create': ['created', 'creates', 'creating'], 'speak': ['spoke', 'speaks', 'speaking'],
+      'read': ['read', 'reads', 'reading'], 'allow': ['allowed', 'allows', 'allowing'],
+      'add': ['added', 'adds', 'adding'], 'spend': ['spent', 'spends', 'spending'],
+      'grow': ['grew', 'grows', 'growing'], 'open': ['opened', 'opens', 'opening'],
+      'walk': ['walked', 'walks', 'walking'], 'win': ['won', 'wins', 'winning'],
+      'offer': ['offered', 'offers', 'offering'], 'remember': ['remembered', 'remembers', 'remembering'],
+      'love': ['loved', 'loves', 'loving'], 'consider': ['considered', 'considers', 'considering'],
+      'appear': ['appeared', 'appears', 'appearing'], 'buy': ['bought', 'buys', 'buying'],
+      'wait': ['waited', 'waits', 'waiting'], 'serve': ['served', 'serves', 'serving'],
+      'die': ['died', 'dies', 'dying'], 'send': ['sent', 'sends', 'sending'],
+      'expect': ['expected', 'expects', 'expecting'], 'build': ['built', 'builds', 'building'],
+      'stay': ['stayed', 'stays', 'staying'], 'fall': ['fell', 'falls', 'falling'],
+      'cut': ['cut', 'cuts', 'cutting'], 'reach': ['reached', 'reaches', 'reaching'],
+      'kill': ['killed', 'kills', 'killing'], 'remain': ['remained', 'remains', 'remaining'],
+      'approach': ['approached', 'approaches', 'approaching']
+    }
+    
+    if (irregularVerbs[lowerWord]) {
+      variations.push(...irregularVerbs[lowerWord])
+    }
+    
+    return variations
+  }
 
   useEffect(() => {
     loadVocabularyLists()
@@ -647,9 +746,32 @@ export function AdminPage() {
             {/* Words List */}
             <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm">
               <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-800">
-                  Words ({words.length})
-                </h2>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-800">
+                    Words ({words.length})
+                  </h2>
+                  {words.length > 0 && (
+                    <div className="text-sm text-gray-600">
+                      {(() => {
+                        console.log(`📊 Processing ${words.length} words for tense issues`)
+                        const tenseIssues = words.filter(word => {
+                          const result = checkTenseMismatch(word)
+                          return result !== null
+                        })
+                        console.log(`🎯 Found ${tenseIssues.length} tense issues:`, tenseIssues.map(w => w.word))
+                        return tenseIssues.length > 0 ? (
+                          <span className="text-orange-600 font-medium">
+                            ⚠️ {tenseIssues.length} tense issue{tenseIssues.length !== 1 ? 's' : ''} found
+                          </span>
+                        ) : (
+                          <span className="text-green-600 font-medium">
+                            ✅ All sentences are correct
+                          </span>
+                        )
+                      })()}
+                    </div>
+                  )}
+                </div>
               </div>
               
               {isLoading ? (
@@ -659,30 +781,65 @@ export function AdminPage() {
                 </div>
               ) : words.length > 0 ? (
                 <div className="divide-y divide-gray-200">
-                  {words.map((word) => (
-                    <div key={word.id} className="p-6 hover:bg-gray-50/50 transition-colors">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-lg font-semibold text-gray-900">{word.word}</h3>
-                            <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                              {word.part_of_speech}
-                            </span>
-                            <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
-                              Level {word.difficulty_level}
-                            </span>
-                            <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
-                              SSAT {word.ssat_importance}
-                            </span>
-                          </div>
-                          
-                          <p className="text-gray-700 mb-2">
-                            <span className="font-medium">Definition:</span> {word.definition}
-                          </p>
-                          
-                          <p className="text-gray-600 mb-3">
-                            <span className="font-medium">Example:</span> {word.example_sentence}
-                          </p>
+                  {words.map((word) => {
+                    console.log(`🎨 Rendering word: "${word.word}"`)
+                    const tenseIssue = checkTenseMismatch(word)
+                    const hasTenseIssue = tenseIssue !== null
+                    console.log(`🎨 Has tense issue: ${hasTenseIssue}, issue: ${tenseIssue}`)
+                    
+                    return (
+                      <div 
+                        key={word.id} 
+                        className={`p-6 hover:bg-gray-50/50 transition-colors ${
+                          hasTenseIssue ? 'border-l-4 border-orange-400 bg-orange-50/30' : ''
+                        }`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-lg font-semibold text-gray-900">{word.word}</h3>
+                              <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                {word.part_of_speech}
+                              </span>
+                              <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                Level {word.difficulty_level}
+                              </span>
+                              <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">
+                                SSAT {word.ssat_importance}
+                              </span>
+                              {hasTenseIssue && (
+                                <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">
+                                  ⚠️ Tense Issue
+                                </span>
+                              )}
+                            </div>
+                            
+                            <p className="text-gray-700 mb-2">
+                              <span className="font-medium">Definition:</span> {word.definition}
+                            </p>
+                            
+                            <div className="text-gray-600 mb-3">
+                              <span className="font-medium">Example:</span> 
+                              {hasTenseIssue ? (
+                                <div className="mt-1">
+                                  <p className="italic">{word.example_sentence}</p>
+                                  <div className="mt-2 p-2 bg-yellow-100 border border-yellow-300 rounded text-sm">
+                                    <p className="text-yellow-800">
+                                      <span className="font-medium">⚠️ Tense Mismatch:</span> 
+                                      {tenseIssue === 'not_found' 
+                                        ? ` Word "${word.word}" not found in sentence`
+                                        : ` Found "${tenseIssue}" instead of "${word.word}"`
+                                      }
+                                    </p>
+                                    <p className="text-yellow-700 text-xs mt-1">
+                                      This will cause issues with fill-in-the-blank questions.
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : (
+                                <span className="italic"> {word.example_sentence}</span>
+                              )}
+                            </div>
                           
                           {(word.synonyms && word.synonyms.length > 0) && (
                             <p className="text-gray-600 mb-1">
@@ -724,7 +881,8 @@ export function AdminPage() {
                         </div>
                       </div>
                     </div>
-                  ))}
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-12">

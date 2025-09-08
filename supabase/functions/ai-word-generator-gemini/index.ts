@@ -59,7 +59,7 @@ Please provide a JSON response with the following structure:
   "word": "${word}",
   "part_of_speech": "noun|verb|adjective|adverb|pronoun|preposition|conjunction|interjection",
   "definition": "Clear, age-appropriate definition in simple language",
-  "example_sentence": "Educational example sentence suitable for grade ${targetGrade}",
+  "example_sentence": "Educational example sentence in present tense suitable for grade ${targetGrade}",
   "synonyms": ["synonym1", "synonym2", "synonym3"],
   "antonyms": ["antonym1", "antonym2"],
   "difficulty_level": 1-5,
@@ -70,7 +70,7 @@ Please provide a JSON response with the following structure:
 
 Guidelines:
 - Definition should be clear and age-appropriate for grade ${targetGrade}
-- Example sentence should be educational and relatable to school/learning
+- Example sentence should be educational, relatable to school/learning, and in present tense
 - Difficulty level: 1=very easy, 5=very difficult for grade ${targetGrade}
 - SSAT importance: 1=rarely tested, 5=essential for SSAT
 - Pronunciation guide should be simple phonetic spelling

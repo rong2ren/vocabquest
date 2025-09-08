@@ -238,13 +238,43 @@ export const useVocabularyStore = create<VocabularyStore>((set, get) => ({
 
   getWordsForReview: async (userId: string) => {
     try {
-      // For now, return empty array - can be implemented later
-      const reviewWords: VocabularyWord[] = []
+      // Try to use the database function first
+      const { data, error } = await supabase.rpc('get_words_for_review', {
+        p_user_id: userId,
+        p_limit: 20
+      })
+
+      if (!error && data && data.length > 0) {
+        set({ reviewWords: data })
+        return data
+      }
+
+      // Fallback: get words that haven't been reviewed recently
+      const { words, userProgress } = get()
+      const now = new Date()
+      const allWords = words.filter(word => {
+        const progress = userProgress[word.id]
+        if (!progress) return true // New words need review
+        return new Date(progress.next_review) <= now
+      })
+
+      // If no words need review, get some random words for practice
+      if (allWords.length === 0) {
+        const randomWords = words.slice(0, Math.min(10, words.length))
+        set({ reviewWords: randomWords })
+        return randomWords
+      }
+
+      const reviewWords = allWords.slice(0, 20)
       set({ reviewWords })
       return reviewWords
     } catch (error) {
       console.error('Error fetching words for review:', error)
-      return []
+      // Fallback to available words
+      const { words } = get()
+      const fallbackWords = words.slice(0, Math.min(10, words.length))
+      set({ reviewWords: fallbackWords })
+      return fallbackWords
     }
   },
 

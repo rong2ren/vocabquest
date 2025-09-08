@@ -212,19 +212,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const updateProfile = async (updates: Partial<User>) => {
+    if (!user) {
+      throw new Error('No user logged in')
+    }
+
     try {
-      const { data, error } = await supabase.functions.invoke('user-profile', {
-        method: 'POST',
-        body: updates
-      })
+      // Update profile directly in the database
+      const { data, error } = await supabase
+        .from('users')
+        .update(updates)
+        .eq('id', user.id)
+        .select()
+        .single()
 
       if (error) {
+        console.error('Database error updating profile:', error)
         toast.error('Failed to update profile')
         throw error
       }
 
-      if (data?.data) {
-        setProfile(data.data.profile)
+      if (data) {
+        // Update local state
+        setProfile(data)
+        // Clear cache to force refresh on next load
+        profileCache.current.delete(user.id)
         toast.success('Profile updated successfully!')
       }
     } catch (error) {

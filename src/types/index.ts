@@ -150,6 +150,7 @@ export interface LearningSession {
   accuracy_percentage?: number
   points_earned: number
   metadata: Record<string, any>
+  is_completed: boolean
   created_at: string
 }
 
@@ -171,6 +172,7 @@ export interface DailyGoal {
 // Learning Mode Types
 export type LearningMode = 'flashcards' | 'quiz' | 'spelling' | 'review'
 export type QuizType = 'multiple_choice' | 'fill_blank' | 'matching'
+export type ReviewMode = 'definition-to-word' | 'word-to-definition' | 'audio-pronunciation'
 
 export interface QuizQuestion {
   id: string
@@ -207,4 +209,38 @@ export interface UserProfileData {
   date_of_birth?: string
   parent_email?: string
   preferences?: Record<string, any>
+}
+
+// Smart Review Types
+export interface Achievement {
+  id: string
+  title: string
+  description: string
+  icon: React.ComponentType<{ className?: string }>
+  color: string
+  points: number
+}
+
+export interface ReviewSession {
+  totalWords: number
+  currentIndex: number
+  correctAnswers: number
+  startTime: Date
+  wordsReviewed: Array<{
+    word: VocabularyWord
+    isCorrect: boolean
+    responseTime: number
+  }>
+  currentStreak: number
+  maxStreak: number
+  pointsEarned: number
+  quickAnswers: number
+}
+
+export interface DailyLearningStats {
+  words_reviewed: number
+  words_learned_today: number
+  accuracy_today: number
+  points_earned_today: number
+  streak_count: number
 }
